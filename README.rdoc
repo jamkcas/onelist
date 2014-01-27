@@ -1,1 +1,3 @@
 Onelist is a to-do app, designed to organize to-do items in one easily sortable list. Users will be able to sort lists easily by attaching tag names, colors, or locations to list items, which they can then sort by simply searching for tagname or clicking on the color.
+
+This app is also my introduction to Angular.js.
