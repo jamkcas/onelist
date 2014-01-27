@@ -28,6 +28,10 @@ GEM
     activesupport (3.2.15)
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
+    angularjs-rails (1.2.10)
+    angularjs-rails-cdn (0.1.4)
+      angularjs-rails
+      railties (>= 3.0)
     arel (3.0.3)
     builder (3.0.4)
     coderay (1.0.9)
@@ -124,6 +128,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails-cdn
   coffee-rails (~> 3.2.1)
   dotenv
   jquery-rails
