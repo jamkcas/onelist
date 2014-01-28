@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-ng-app>
+<html data-ng-app='oneListApp'>
 <head>
   <title>Onelist</title>
   <%= stylesheet_link_tag    "application", :media => "all" %>
@@ -8,8 +8,7 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<input type='text' data-ng-model='test' />
-{{ test }}
+
 <%= yield %>
 
 </body>
