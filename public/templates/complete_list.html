@@ -1,2 +1,7 @@
 <h1>hi</h1>
+<div data-ng-controller='completeController'>
+  <ul>
+    <li data-ng-repeat='item in items'>{{ item.title }}: {{ item.note }} - complete</li>
+  </ul>
+</div>
 <a href='#/incomplete'>incomplete</a>

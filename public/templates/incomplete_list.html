@@ -1,2 +1,14 @@
 <h2>bye</h2>
+<div data-ng-controller='incompleteController'>
+  <ul>
+    <li data-ng-repeat='item in items | filter:sort:title'>{{ item.title }}: {{ item.note }} - incomplete</li>
+  </ul>
+  <input type='text' data-ng-model='sort.title' />
+  <p>Item Title:</p>
+  <input type='text' data-ng-model='newItem.title' />
+  <p>Item Note:</p>
+  <input type='text' data-ng-model='newItem.note' />
+  <button data-ng-click="addItem()">Add Item</button>
+</div>
+
 <a href='#/complete'>complete</a>
