@@ -14,12 +14,19 @@ app.config(function($routeProvider) {
     .otherwise({ redirectTo: '/incomplete' });
 });
 
-app.controller('completeController', function($scope) {
-  $scope.items = [
-    { title: 'shop', note: 'buy groceries' },
-    { title: 'job', note: 'look for job' },
-    { title: 'clean', note: 'clean house' }
-  ];
+app.controller('completeController', function($scope, itemsFactory) {
+  function init() {
+    itemsFactory.getItems().success(function(data) {
+      $scope.items = data;
+    });
+  }
+
+  init();
+  // $scope.items = [
+  //   { title: 'shop', note: 'buy groceries' },
+  //   { title: 'job', note: 'look for job' },
+  //   { title: 'clean', note: 'clean house' }
+  // ];
 });
 
 app.controller('incompleteController', function($scope) {
@@ -33,4 +40,14 @@ app.controller('incompleteController', function($scope) {
     $scope.items.push({ title: $scope.newItem.title, note: $scope.newItem.note });
     console.log($scope.items)
   }
+});
+
+app.factory('itemsFactory', function($http) {
+  var factory = {};
+
+  factory.getItems = function() {
+    return $http.get('/items.json');
+  };
+
+  return factory;
 });
