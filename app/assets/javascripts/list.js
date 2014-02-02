@@ -5,6 +5,22 @@ var postErrors = function(elem, msg) {
   elem.appendChild(error);
 };
 
+var addLogoutDisplay = function(data) {
+  var loginDisplay = document.getElementById('loginDisplay');
+  var welcome = document.createElement('li');
+  var welcomeText = document.createElement('p');
+  welcomeText.innerHTML = data;
+  var logOut = document.createElement('li');
+  var logOutLink = document.createElement('a');
+  logOutLink.href = '/sessions/id';
+  logOutLink.setAttribute('data-method', 'delete');
+  logOutLink.innerHTML = 'Log Out';
+  welcome.appendChild(welcomeText);
+  loginDisplay.appendChild(welcome);
+  logOut.appendChild(logOutLink);
+  loginDisplay.appendChild(logOut);
+};
+
 var app = angular.module('oneListApp', ['ngRoute']);
 
 app.config(function($routeProvider) {
@@ -63,13 +79,26 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
 });
 
 app.controller('loginController', function($scope, loginFactory, sharedAttributesService) {
+  var loggedOut = document.getElementsByClassName('loggedOut');
+  for(var i = 0; i < loggedOut.length; i ++) {
+    loggedOut[i].className = 'loggedOut hide';
+  }
+
   $scope.login = function() {
     var data = {
       email: $scope.user.email,
-      password: $scope.user.password
+      password: $scope.user.password,
+      remember: $scope.user.remember
     }
     loginFactory.login(data).success(function(data) {
-
+      if(data === 'Invalid email or password.') {
+        var errors = document.getElementById('loginErrors');
+        errors.innerHTML = '';
+        postErrors(errors, data);
+      } else {
+        window.location = '#/incomplete';
+        addLogoutDisplay(data);
+      }
     });
   };
 
@@ -91,6 +120,7 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
       } else {
         window.location = '#/incomplete';
         sharedAttributesService.setMessage(data.notice);
+        addLogoutDisplay(data.notice);
       }
     }).error(function(data) {
       var message = 'Sorry, we were unable to process your sign up request.';
@@ -121,7 +151,7 @@ app.factory('loginFactory', function($http) {
   };
 
   factory.login = function(data) {
-    return $http.post('/users', { user: data });
+    return $http.post('/sessions', { user: data });
   };
 
   return factory;

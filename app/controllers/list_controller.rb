@@ -1,4 +1,5 @@
 class ListController < ApplicationController
+  before_filter :authorize, only: [:getItems]
   def index
 
   end

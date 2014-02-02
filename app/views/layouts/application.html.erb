@@ -8,6 +8,15 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <ul id='loginDisplay'>
+    <% if current_user %>
+      <li><p>Welcome, <%= current_user.username.capitalize %></p></li>
+      <li><%= link_to 'Log Out', session_path('current'), method: 'delete' %></li>
+    <% else %>
+      <li class='loggedOut'><a href='#/login'>Log In</a></li>
+      <li class='loggedOut'><a href='#/signup'>Sign Up</a></li>
+    <% end %>
+  </ul>
 
 <%= yield %>
 

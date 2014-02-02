@@ -1,7 +1,10 @@
 <div data-ng-controller='loginController'>
   <form>
     <input type='text' data-ng-model='user.email' placeHolder='Enter your email' />
-    <input type='text' data-ng-model='user.email' placeHolder='Enter your password' />
+    <input type='password' data-ng-model='user.password' placeHolder='Enter your password' />
+    <div id='loginErrors'></div>
+    <label>Remember Me</label>
+    <input type='checkbox' data-ng-model='user.remember' />
     <button data-ng-click='login()'>Log In</button>
     <a href='#/signup'>Sign Up</a>
   </form>
