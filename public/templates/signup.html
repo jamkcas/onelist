@@ -1,0 +1,11 @@
+<div data-ng-controller='loginController'>
+  <form>
+    <input type='text' data-ng-model='user.username' placeHolder='Enter a username' />
+    <input type='text' data-ng-model='user.email' placeHolder='Enter your email address' />
+    <input type='password' data-ng-model='user.password' placeHolder='Enter a password' />
+    <input type='password' data-ng-model='user.password_confirmation' placeHolder='Confirm password' />
+    <div id='signUpErrors'></div>
+    <button data-ng-click='signUp()'>Sign Up</button>
+    <a href='#/login'>Cancel</a>
+  </form>
+</div>

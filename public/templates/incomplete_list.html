@@ -1,5 +1,9 @@
-<h2>bye</h2>
+<!-- <div data-ng-include src="'templates/messages.html'"></div> -->
+
+<h2>To Do:</h2>
+
 <div data-ng-controller='incompleteController'>
+  <h3>{{ message }}</h3>
   <ul>
     <li data-ng-repeat='item in items | filter:sort:title'>{{ item.title }}: {{ item.note }} - incomplete</li>
   </ul>
@@ -12,3 +16,5 @@
 </div>
 
 <a href='#/complete'>complete</a>
+<a href='#/login'>log in</a>
+<a href='#/signup'>sign up</a>

@@ -33,6 +33,7 @@ GEM
       angularjs-rails
       railties (>= 3.0)
     arel (3.0.3)
+    bcrypt-ruby (3.0.1)
     builder (3.0.4)
     coderay (1.0.9)
     coffee-rails (3.2.2)
@@ -129,6 +130,7 @@ PLATFORMS
 
 DEPENDENCIES
   angularjs-rails-cdn
+  bcrypt-ruby (~> 3.0.0)
   coffee-rails (~> 3.2.1)
   dotenv
   jquery-rails
