@@ -9,6 +9,6 @@ class SessionsController < ApplicationController
 
   def destroy
     cookies.delete(:auth_token)
-    redirect_to '#/incomplete'
+    redirect_to '#/login'
   end
 end

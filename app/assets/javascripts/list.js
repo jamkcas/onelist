@@ -1,5 +1,6 @@
 var postErrors = function(elem, msg) {
   var error = document.createElement('li');
+  error.className = 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12';
   var errorMessage = document.createTextNode(msg);
   error.appendChild(errorMessage);
   elem.appendChild(error);
@@ -44,7 +45,7 @@ app.config(function($routeProvider) {
       controller: 'loginController',
       templateUrl: 'templates/login.html'
     })
-    .otherwise({ redirectTo: '/incomplete' });
+    .otherwise({ redirectTo: '/login' });
 });
 
 app.config(["$httpProvider", function($httpProvider) {
@@ -79,11 +80,6 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
 });
 
 app.controller('loginController', function($scope, loginFactory, sharedAttributesService) {
-  var loggedOut = document.getElementsByClassName('loggedOut');
-  for(var i = 0; i < loggedOut.length; i ++) {
-    loggedOut[i].className = 'loggedOut hide';
-  }
-
   $scope.login = function() {
     var data = {
       email: $scope.user.email,
@@ -111,7 +107,7 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
     }
 
     loginFactory.signUp(data).success(function(data) {
-      var errors = document.getElementById('signUpErrors');
+      var errors = document.getElementById('signupErrors');
       errors.innerHTML = '';
       if(data.errors.length > 0) {
         for(var i = 0; i < data.errors.length; i++) {

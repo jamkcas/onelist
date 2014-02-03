@@ -1,0 +1,156 @@
+@font-face {
+    font-family: 'scratchregular';
+    src: url('/fonts/Scratch_-webfont.eot');
+    src: url('/fonts/Scratch_-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/Scratch_-webfont.woff') format('woff'),
+         url('/fonts/Scratch_-webfont.ttf') format('truetype'),
+         url('/fonts/Scratch_-webfont.svg#scratchregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'arsenalregular';
+    src: url('/fonts/arsenal-regular-webfont.eot');
+    src: url('/fonts/arsenal-regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/arsenal-regular-webfont.woff') format('woff'),
+         url('/fonts/arsenal-regular-webfont.ttf') format('truetype'),
+         url('/fonts/arsenal-regular-webfont.svg#arsenalregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+.hide {
+  display: none;
+}
+
+#body {
+  background-color: #000000;
+}
+
+.container {
+  background: url('/images/noisy_net.jpg') repeat;
+  font: normal 14px/14px 'arsenalregular', Helvetica, sans-serif;
+  color: #878787;
+}
+
+/******************/
+/*** Login Page ***/
+/******************/
+
+.loginHeader {
+  font-family: 'scratchregular';
+  text-align: center;
+  margin-top: 90px;
+  margin-bottom: 110px;
+
+  h1 {
+    font-size: 70px;
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  h4 {
+    font-size: 30px;
+    color: white;
+  }
+}
+
+.loginForm {
+  padding: 30px 0 20px 0;
+  background: -webkit-radial-gradient(center, ellipse cover, #8952c1 0%, #5f2f90 100%);
+  margin-bottom: 30px;
+  border-radius: 10px;
+}
+
+.loginFormFields {
+  li {
+    list-style: none;
+    padding: 5px;
+    margin-top: 10px;
+
+    label {
+      margin-left: 3px;
+    }
+  }
+
+  li:last-child {
+    margin-top: 2px;
+    color: white;
+  }
+
+  input {
+    padding: 10px;
+    font-size: 16px;
+    line-height: 20px;
+  }
+}
+
+.loginButtons {
+  text-align: center;
+  margin-top: 5px;
+  color: white;
+
+  li {
+    list-style: none;
+  }
+
+  p {
+    border-radius: 8px;
+    padding: 10px 30px;
+    cursor: pointer;
+    background: -webkit-linear-gradient(top, #c7d8fb 0%, #93b2f1 100%);
+    display: inline-block;
+    font-size: 20px;
+    line-height: 25px;
+  }
+
+  a {
+    color: #4f89ff;
+    margin-left: 3px;
+  }
+}
+
+#loginErrors {
+  color: red;
+  min-height: 0px;
+
+  li {
+    list-style: none;
+    padding: 5px;
+  }
+
+  li:last-child {
+    margin-bottom: 5px;
+  }
+}
+
+/*******************/
+/*** Signup Page ***/
+/*******************/
+
+.signupHeader {
+  @extend .loginHeader;
+}
+
+.signupForm {
+  @extend .loginForm;
+}
+
+.signupFormFields {
+  @extend .loginFormFields;
+
+  li:last-child {
+    margin-top: 10px;
+  }
+}
+
+.signupButtons {
+  @extend .loginButtons;
+}
+
+#signupErrors {
+  @extend #loginErrors;
+}
