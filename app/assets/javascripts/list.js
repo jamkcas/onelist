@@ -6,6 +6,23 @@ var postErrors = function(elem, msg) {
   elem.appendChild(error);
 };
 
+var defineLeft = function() {
+  return (-(parseInt($('.container').css('margin-left').match(/[0-9]+/)[0]) + 300)).toString() + 'px';
+};
+
+var setOptionsHeight = function() {
+  if($(window).height() > $('.mainView').height()) {
+    var height = $(window).height();
+  } else {
+    var height = $('.mainView').height();
+  }
+  $('.optionsView').css('height', height);
+};
+
+var calculateOptionsWidth = function() {
+  return $(window).width() * 0.8;
+};
+
 var app = angular.module('oneListApp', ['ngRoute']);
 
 app.config(function($routeProvider) {
@@ -43,7 +60,7 @@ app.config(["$httpProvider", function($httpProvider) {
 
 app.controller('completeController', function($scope, itemsFactory) {
   var init = function() {
-    itemsFactory.getItems().success(function(data) {
+    itemsFactory.getCompleteItems().success(function(data) {
       $scope.items = data;
     });
   }
@@ -54,12 +71,17 @@ app.controller('completeController', function($scope, itemsFactory) {
 app.controller('incompleteController', function($scope, itemsFactory, sharedAttributesService) {
   var init = function() {
     $scope.message = 'Welcome, ' + gon.current_user;
-    itemsFactory.getItems().success(function(data) {
+    itemsFactory.getIncompleteItems().success(function(data) {
       $scope.items = data;
     });
   };
 
   init();
+
+  $scope.addItem = function() {
+    $scope.items.push({ title: $scope.newItem.title });
+    $scope.newItem.title = '';
+  }
 });
 
 app.controller('loginController', function($scope, loginFactory, sharedAttributesService) {
@@ -114,7 +136,11 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
 app.factory('itemsFactory', function($http) {
   var factory = {};
 
-  factory.getItems = function() {
+  factory.getIncompleteItems = function() {
+    return $http.get('/items.json');
+  };
+
+  factory.getCompleteItems = function() {
     return $http.get('/items.json');
   };
 
@@ -155,6 +181,7 @@ app.service('sharedAttributesService', function() {
 /***************/
 
 $(function() {
+  setEvents();
   // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
   if(gon.current_user === '') {
     window.location.replace('#/login');
@@ -162,8 +189,21 @@ $(function() {
 
   // Making sure the container covers at least the height of the window
   $('.container').css('min-height', $(window).height());
-  // On resize, making sure the container covers at least the height of the window
+  // On resize,
   window.onresize = function() {
+    // Making sure the container covers at least the height of the window
     $('.container').css('min-height', $(window).height());
+    // Setting the height of the options view when window is resized
+    setOptionsHeight();
+    // Resetting the main and option views if window is resized > 768px
+    if($(window).width() > 768) {
+      $('.mainView').css('left', '0px');
+      $('.optionsView').css('left', -($('.optionsView').width()));
+    }
+    // Adjusting the options width based on the window width if options are being displayed
+    if($('.mainView').css('left') != '0px') {
+      $('.optionsView').css('width', calculateOptionsWidth());
+      $('.mainView').css('left', calculateOptionsWidth());
+    }
   };
 });

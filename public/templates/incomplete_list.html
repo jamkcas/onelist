@@ -3,20 +3,40 @@
 
 
 <div data-ng-controller='incompleteController' class='row main'>
+  <div class='optionsView'>
+    <header class='optionsTitle col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <h1>OneList</h1>
+      <h4>{{ message }}</h4>
+    </header>
+
+    <ul class='optionsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <li><p><a href='#/complete'>Show Completed</a></p></li>
+      <li><p><a href='#/complete'>Manage Labels</a></p></li>
+      <li><p><a href='#/complete'>Edit Account</a></p></li>
+    </ul>
+  </div> <!-- end optionsView -->
+
   <div class='mainView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <div data-ng-include src="'templates/header.html'"></div>
-    <h2>To Do:</h2>
-    <div class=''></div>
-  <!--   <ul>
-      <li data-ng-repeat='item in items | filter:sort:title'>{{ item.title }}: {{ item.note }} - incomplete</li>
+
+    <ul class='incompleteList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
+      <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+        <input type='text' data-ng-model='newItem.title' class='col-lg-11 col-md-11 col-sm-11 col-xs-10' placeholder='Add an item' />
+        <div class='newItemButton col-lg-1 col-md-1 col-sm-1 col-xs-2'>
+          <button data-ng-click="addItem()"><i class="fa fa-plus"></i></button>
+        </div>
+      </li>
+      <li data-ng-repeat='item in items | filter:sort:title' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+        <input type='checkbox' class='complete col-lg-1 col-md-1 col-sm-1 col-xs-1'/>
+        <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
+      </li>
     </ul>
-    <input type='text' data-ng-model='sort.title' />
+ <!--    <input type='text' data-ng-model='sort.title' />
     <p>Item Title:</p>
     <input type='text' data-ng-model='newItem.title' />
     <p>Item Note:</p>
     <input type='text' data-ng-model='newItem.note' />
     <button data-ng-click="addItem()">Add Item</button> -->
-  </div>
-  <a href='#/complete'>complete</a>
-</div>
+  </div> <!-- end mainView -->
+</div> <!-- end main -->
 

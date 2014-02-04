@@ -20,20 +20,24 @@
     font-style: normal;
 }
 
-
+$radialBG: -webkit-radial-gradient(center, ellipse cover, #8952c1 0%, #5f2f90 100%);
+$pattern: url('/images/noisy_net.jpg') repeat;
+$buttonBG: -webkit-linear-gradient(top, #c7d8fb 0%, #93b2f1 100%);
+$listBG: -webkit-linear-gradient(top, white 0%, #ececec 100%);
 
 .hide {
   display: none;
 }
 
 body {
-  background: url('/images/noisy_net.jpg') repeat;
+  background: $pattern;
 }
 
 .container {
-  background: url('/images/noisy_net.jpg') repeat;
+  background: $pattern;
   font: normal 14px/14px 'arsenalregular', Helvetica, sans-serif;
   color: #878787;
+  letter-spacing: 2px;
 }
 
 /******************/
@@ -60,7 +64,7 @@ body {
 
 .loginForm {
   padding: 30px 0 20px 0;
-  background: -webkit-radial-gradient(center, ellipse cover, #8952c1 0%, #5f2f90 100%);
+  background: $radialBG;
   margin-bottom: 30px;
   border-radius: 10px;
 }
@@ -110,7 +114,7 @@ body {
     border: 0;
     padding: 10px 30px;
     cursor: pointer;
-    background: -webkit-linear-gradient(top, #c7d8fb 0%, #93b2f1 100%);
+    background: $buttonBG;
     display: inline-block;
     font-size: 20px;
     line-height: 25px;
@@ -204,26 +208,172 @@ body {
   }
 }
 
-/*******************/
-/*** Main Header ***/
-/*******************/
+/*****************/
+/*** Main Page ***/
+/*****************/
 
 .main {
   position: relative;
+
+  .mainView {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    padding: 0px;
+
+    .mainHeader {
+      margin: 0px;
+    }
+
+    .searchFilters {
+      padding: 0px;
+      text-align: center;
+
+      .searchLabels, .searchItems {
+        padding: 20px;
+        background: $radialBG;
+        border-top: 1px solid black;
+        border-bottom: 1px solid black;
+
+        p {
+          margin: 0px;
+          font-size: 16px;
+          line-height: 16px;
+        }
+      }
+
+      .searchLabels {
+        border-right: 1px solid black;
+      }
+    }
+
+    .incompleteList {
+      padding: 0px;
+
+      li {
+        list-style: none;
+        border-bottom: 1px solid black;
+        -webkit-box-shadow: 0px 2px 2px -3px white;
+      }
+
+      li:first-child {
+        padding: 20px;
+
+        input {
+          padding: 5px 10px;
+          font-size: 18px;
+          line-height: 23px;
+          border-radius: 8px;
+        }
+      }
+
+      .listItem {
+        padding: 20px;
+        background: $listBG;
+
+        p {
+          margin: 0px;
+          font-size: 16px;
+          line-height: 21px;
+        }
+      }
+    }
+
+    .newItemButton {
+      button {
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 21px;
+        background: -webkit-linear-gradient(top, white 0%, #878787 100%);
+        border: 0px;
+      }
+    }
+  }
 }
 
-.mainView {
+
+
+
+
+
+.optionsView {
   position: absolute;
   top: 0px;
-  left: 0px;
+  left: -400px;
+  background: white;
+  display: none;
+  border-right: 1px solid black;
+
+  .optionsTitle {
+    margin: 0px;
+    padding: 0px;
+
+    h1 {
+      font-family: 'scratchregular';
+      padding: 10px 20px;
+      margin: 0px;
+      background: $radialBG;
+      color: white;
+    }
+
+    h4 {
+      font-size: 14px;
+      padding: 10px 20px;
+      margin: 0px;
+      // border-bottom: 1px solid #878787;
+    }
+  }
+
+  .optionsList {
+    padding: 0px;
+
+    li {
+      border-bottom: 1px solid #878787;
+      // -webkit-box-shadow: 0 1px 1px #DEDEDF;
+      background: $listBG;
+      list-style: none;
+      padding: 30px 0px;
+      cursor: pointer;
+
+      p {
+        padding: 0 20px;
+        font-size: 22px;
+        line-height: 22px;
+        margin: 0px;
+
+        a {
+          color: inherit;
+        }
+      }
+    }
+
+    li:hover {
+      background: -webkit-linear-gradient(top, #dfc0ff 0%, #8952c1 100%);
+      color: white;
+    }
+
+    li:first-child {
+      border-top: 1px solid #878787;
+    }
+  }
 }
 
-@media screen and (max-width: 992px) {
+
+
+/*********************/
+/*** Media Queries ***/
+/*********************/
+
+@media screen and (max-width: 768px) {
+  // .container {
+  //   background: white;
+  // }
+
   .mainTitle h1 {
     text-align: center;
   }
 
-  .options {
+  .options, .optionsView {
     display: block;
   }
 
