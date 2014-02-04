@@ -6,22 +6,6 @@ var postErrors = function(elem, msg) {
   elem.appendChild(error);
 };
 
-var addLogoutDisplay = function(data) {
-  var loginDisplay = document.getElementById('loginDisplay');
-  var welcome = document.createElement('li');
-  var welcomeText = document.createElement('p');
-  welcomeText.innerHTML = data;
-  var logOut = document.createElement('li');
-  var logOutLink = document.createElement('a');
-  logOutLink.href = '/sessions/id';
-  logOutLink.setAttribute('data-method', 'delete');
-  logOutLink.innerHTML = 'Log Out';
-  welcome.appendChild(welcomeText);
-  loginDisplay.appendChild(welcome);
-  logOut.appendChild(logOutLink);
-  loginDisplay.appendChild(logOut);
-};
-
 var app = angular.module('oneListApp', ['ngRoute']);
 
 app.config(function($routeProvider) {
@@ -69,14 +53,13 @@ app.controller('completeController', function($scope, itemsFactory) {
 
 app.controller('incompleteController', function($scope, itemsFactory, sharedAttributesService) {
   var init = function() {
+    $scope.message = 'Welcome, ' + gon.current_user;
     itemsFactory.getItems().success(function(data) {
       $scope.items = data;
     });
   };
 
   init();
-
-  $scope.message = sharedAttributesService.message;
 });
 
 app.controller('loginController', function($scope, loginFactory, sharedAttributesService) {
@@ -92,8 +75,8 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
         errors.innerHTML = '';
         postErrors(errors, data);
       } else {
+        gon.current_user = data;
         window.location = '#/incomplete';
-        addLogoutDisplay(data);
       }
     });
   };
@@ -114,9 +97,8 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
           postErrors(errors, data.errors[i]);
         }
       } else {
+        gon.current_user = data.notice;
         window.location = '#/incomplete';
-        sharedAttributesService.setMessage(data.notice);
-        addLogoutDisplay(data.notice);
       }
     }).error(function(data) {
       var message = 'Sorry, we were unable to process your sign up request.';
@@ -153,6 +135,10 @@ app.factory('loginFactory', function($http) {
   return factory;
 });
 
+/****************/
+/*** Services ***/
+/****************/
+
 app.service('sharedAttributesService', function() {
   var service = {};
 
@@ -161,4 +147,23 @@ app.service('sharedAttributesService', function() {
   }
 
   return service;
+});
+
+
+/***************/
+/*** On Load ***/
+/***************/
+
+$(function() {
+  // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
+  if(gon.current_user === '') {
+    window.location.replace('#/login');
+  }
+
+  // Making sure the container covers at least the height of the window
+  $('.container').css('min-height', $(window).height());
+  // On resize, making sure the container covers at least the height of the window
+  window.onresize = function() {
+    $('.container').css('min-height', $(window).height());
+  };
 });

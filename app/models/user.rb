@@ -24,7 +24,7 @@ class User < ActiveRecord::Base
     # If the user is successfully saved, the session user_id is set to the new user's id and a welcome notice is returned, else an error notice is returned
     if user.save
       session[:user_id] = user.id
-      response[:notice] = 'Welcome, ' + user.username.capitalize
+      response[:notice] = user.username.capitalize
     else
       response[:notice] = 'Sorry, we were unable to process your sign up request.'
     end

@@ -1,5 +1,5 @@
-<h1>hi</h1>
 <div data-ng-controller='completeController'>
+  <div data-ng-include src="'templates/header.html'"></div>
   <ul>
     <li data-ng-repeat='item in items'>{{ item.title }}: {{ item.note }} - complete</li>
   </ul>

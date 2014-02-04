@@ -26,8 +26,8 @@
   display: none;
 }
 
-#body {
-  background-color: #000000;
+body {
+  background: url('/images/noisy_net.jpg') repeat;
 }
 
 .container {
@@ -43,8 +43,8 @@
 .loginHeader {
   font-family: 'scratchregular';
   text-align: center;
-  margin-top: 90px;
-  margin-bottom: 110px;
+  margin-top: 30px;
+  margin-bottom: 50px;
 
   h1 {
     font-size: 70px;
@@ -69,11 +69,15 @@
   li {
     list-style: none;
     padding: 5px;
-    margin-top: 10px;
+    margin-top: 20px;
 
     label {
       margin-left: 3px;
     }
+  }
+
+  li:first-child {
+    margin-top: 10px;
   }
 
   li:last-child {
@@ -97,8 +101,13 @@
     list-style: none;
   }
 
-  p {
+  li:first-child {
+    margin-bottom: 10px;
+  }
+
+  button {
     border-radius: 8px;
+    border: 0;
     padding: 10px 30px;
     cursor: pointer;
     background: -webkit-linear-gradient(top, #c7d8fb 0%, #93b2f1 100%);
@@ -116,6 +125,7 @@
 #loginErrors {
   color: red;
   min-height: 0px;
+  margin-top: 10px;
 
   li {
     list-style: none;
@@ -143,7 +153,8 @@
   @extend .loginFormFields;
 
   li:last-child {
-    margin-top: 10px;
+    margin-top: 20px;
+    color: #878787;
   }
 }
 
@@ -153,4 +164,70 @@
 
 #signupErrors {
   @extend #loginErrors;
+  margin-bottom: 10px;
+}
+
+/*******************/
+/*** Main Header ***/
+/*******************/
+
+.mainHeader {
+  color: white;
+}
+
+.mainTitle {
+  padding: 20px 10px;
+
+  h1 {
+    font-family: 'scratchregular';
+    margin: 0px;
+  }
+}
+
+.options {
+  font-size: 36px;
+  padding: 20px 10px;
+  display: none;
+  margin-left: 20px;
+}
+
+#loginDisplay {
+  text-align: right;
+  padding: 20px 10px;
+
+  li {
+    list-style: none;
+
+    p {
+      margin-bottom: 3px;
+    }
+  }
+}
+
+/*******************/
+/*** Main Header ***/
+/*******************/
+
+.main {
+  position: relative;
+}
+
+.mainView {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+@media screen and (max-width: 992px) {
+  .mainTitle h1 {
+    text-align: center;
+  }
+
+  .options {
+    display: block;
+  }
+
+  #loginDisplay {
+    display: none;
+  }
 }

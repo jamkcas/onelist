@@ -2,23 +2,17 @@
 <html data-ng-app='oneListApp'>
 <head>
   <title>Onelist</title>
+  <%= include_gon %>
   <%= stylesheet_link_tag    "application", :media => "all" %>
   <%= angularjs_include_tag :google %>
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
-<body id='body'>
-  <div class='container'>
-    <header class='mainHeader row'>
-      <ul id='loginDisplay'>
-        <% if current_user %>
-          <li><p>Welcome, <%= current_user.username.capitalize %></p></li>
-          <li><%= link_to 'Log Out', session_path('current'), method: 'delete' %></li>
-        <% end %>
-      </ul>
-    </header>
+<body>
 
+  <div class='container'>
     <%= yield %>
   </div>
 

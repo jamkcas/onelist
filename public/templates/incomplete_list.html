@@ -1,19 +1,22 @@
 <!-- <div data-ng-include src="'templates/messages.html'"></div> -->
 
-<h2>To Do:</h2>
 
-<div data-ng-controller='incompleteController'>
-  <h3 class="{{ loggedInDisplay }}">{{ message }}</h3>
 
-  <ul>
-    <li data-ng-repeat='item in items | filter:sort:title'>{{ item.title }}: {{ item.note }} - incomplete</li>
-  </ul>
-  <input type='text' data-ng-model='sort.title' />
-  <p>Item Title:</p>
-  <input type='text' data-ng-model='newItem.title' />
-  <p>Item Note:</p>
-  <input type='text' data-ng-model='newItem.note' />
-  <button data-ng-click="addItem()">Add Item</button>
+<div data-ng-controller='incompleteController' class='row main'>
+  <div class='mainView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <div data-ng-include src="'templates/header.html'"></div>
+    <h2>To Do:</h2>
+    <div class=''></div>
+  <!--   <ul>
+      <li data-ng-repeat='item in items | filter:sort:title'>{{ item.title }}: {{ item.note }} - incomplete</li>
+    </ul>
+    <input type='text' data-ng-model='sort.title' />
+    <p>Item Title:</p>
+    <input type='text' data-ng-model='newItem.title' />
+    <p>Item Note:</p>
+    <input type='text' data-ng-model='newItem.note' />
+    <button data-ng-click="addItem()">Add Item</button> -->
+  </div>
+  <a href='#/complete'>complete</a>
 </div>
 
-<a href='#/complete'>complete</a>
