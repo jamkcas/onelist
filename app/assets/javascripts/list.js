@@ -23,7 +23,16 @@ var calculateOptionsWidth = function() {
   return $(window).width() * 0.8;
 };
 
-var app = angular.module('oneListApp', ['ngRoute']);
+var changeLoc = function(loc) {
+  var width = calculateOptionsWidth();
+  $('.mainView').animate({ 'left': '0' });
+  $('.optionsView').animate({ 'left': -width }, {'complete': function() {
+      window.location = loc;
+    }
+  });
+};
+
+var app = angular.module('oneListApp', ['ngRoute', 'ngAnimate']);
 
 app.config(function($routeProvider) {
   $routeProvider.when('/complete',
@@ -60,10 +69,11 @@ app.config(["$httpProvider", function($httpProvider) {
 
 app.controller('completeController', function($scope, itemsFactory) {
   var init = function() {
+    $scope.message = 'Welcome, ' + gon.current_user;
     itemsFactory.getCompleteItems().success(function(data) {
       $scope.items = data;
     });
-  }
+  };
 
   init();
 });
@@ -79,8 +89,36 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
   init();
 
   $scope.addItem = function() {
-    $scope.items.push({ title: $scope.newItem.title });
-    $scope.newItem.title = '';
+    var title = $scope.newItem.title;
+
+    itemsFactory.saveItem(title).success(function(data) {
+      $scope.items.push(data.item);
+      $scope.newItem.title = '';
+    });
+  };
+
+  $scope.deleteItem = function(i) {
+    $scope.items.splice(i, 1);
+  };
+});
+
+app.directive('removeItem', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      var listItem = element.parent();
+      var width = listItem[0].offsetWidth.toString() + 'px';
+      var test = function() {
+        listItem.css('left', width);
+      };
+      var test2 = function() {
+        scope.$apply(attrs.removeItem);
+      };
+
+      test();
+      setTimeout(test2, 1000);
+
+    });
+
   }
 });
 
@@ -109,7 +147,7 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
       email: $scope.user.email,
       password: $scope.user.password,
       password_confirmation: $scope.user.password_confirmation
-    }
+    };
 
     loginFactory.signUp(data).success(function(data) {
       var errors = document.getElementById('signupErrors');
@@ -126,7 +164,7 @@ app.controller('loginController', function($scope, loginFactory, sharedAttribute
       var message = 'Sorry, we were unable to process your sign up request.';
       postErrors(errors, errorMessage);
     });
-  }
+  };
 });
 
 /*****************/
@@ -137,11 +175,15 @@ app.factory('itemsFactory', function($http) {
   var factory = {};
 
   factory.getIncompleteItems = function() {
-    return $http.get('/items.json');
+    return $http.get('/getIncomplete.json');
   };
 
   factory.getCompleteItems = function() {
-    return $http.get('/items.json');
+    return $http.get('/getComplete.json');
+  };
+
+  factory.saveItem = function(title) {
+    return $http.post('/saveItem', { title: title })
   };
 
   return factory;
@@ -170,7 +212,7 @@ app.service('sharedAttributesService', function() {
 
   service.setMessage = function(msg) {
     return service.message = msg;
-  }
+  };
 
   return service;
 });

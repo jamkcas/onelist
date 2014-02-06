@@ -19,4 +19,48 @@ var setEvents = function() {
       $('.optionsView').animate({ 'left': -left });
     }
   });
+
+  $('.container').on('click', '.goToComplete', function(e) {
+    e.preventDefault();
+    changeLoc('#/complete');
+  });
+
+  $('.container').on('click', '.goToIncomplete', function(e) {
+    e.preventDefault();
+    changeLoc('#/incomplete');
+  });
+
+  /*******************/
+  /*** Items Event ***/
+  /*******************/
+
+  $('.container').on('click', '.changeStatus', function() {
+    var that = $(this);
+    var id = that.parent().data('id');
+    var listItem = that.parent().parent();
+
+    if($(this).hasClass('complete')) {
+      var status = true;
+    } else {
+      var status = false;
+    }
+
+    // $.ajax('/changeStatus', {
+    //   method: 'PUT',
+    //   data: {
+    //     heading: 'ajax request',
+    //     complete: status,
+    //     item_id: id
+    //   }
+    // }).success(function(data) {
+    //   that.next().toggleClass('crossedOut');
+    //   listItem.animate({ 'left': listItem.width() }, { 'complete': function() {
+    //       listItem.animate({ 'height': '0' }, { 'complete': function() {
+    //           listItem.remove();
+    //         }
+    //       });
+    //     }
+    //   });
+    // });
+  });
 };

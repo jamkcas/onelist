@@ -10,25 +10,28 @@
     </header>
 
     <ul class='optionsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-      <li><p><a href='#/complete'>Show Completed</a></p></li>
-      <li><p><a href='#/complete'>Manage Labels</a></p></li>
-      <li><p><a href='#/complete'>Edit Account</a></p></li>
+      <li><a href='#/complete' class='goToComplete'><p>Show Completed</p></a></li>
+      <li><a href='#/complete'><p>Manage Labels</p></a></li>
+      <li><a href='#/complete'><p>Edit Account</p></a></li>
+      <li><a href='/sessions/id' data-method='delete'><p>Log Out</p></a></li>
     </ul>
   </div> <!-- end optionsView -->
 
   <div class='mainView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <div data-ng-include src="'templates/header.html'"></div>
 
-    <ul class='incompleteList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
-      <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <ul class='itemsList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
+      <li class='addItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
         <input type='text' data-ng-model='newItem.title' class='col-lg-11 col-md-11 col-sm-11 col-xs-10' placeholder='Add an item' />
         <div class='newItemButton col-lg-1 col-md-1 col-sm-1 col-xs-2'>
           <button data-ng-click="addItem()"><i class="fa fa-plus"></i></button>
         </div>
       </li>
       <li data-ng-repeat='item in items | filter:sort:title' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-        <input type='checkbox' class='complete col-lg-1 col-md-1 col-sm-1 col-xs-1'/>
-        <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
+        <div class='listDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}'>
+          <input type='checkbox' class='changeStatus complete col-lg-1 col-md-1 col-sm-1 col-xs-1' remove-item='deleteItem($index)' />
+          <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
+        </div>
       </li>
     </ul>
  <!--    <input type='text' data-ng-model='sort.title' />

@@ -4,7 +4,7 @@ class CreateItems < ActiveRecord::Migration
       t.string :title
       t.text :note
       t.string :due_date
-      t.boolean :complete
+      t.boolean :complete, default: false
       t.string :image
       t.string :reminder
 

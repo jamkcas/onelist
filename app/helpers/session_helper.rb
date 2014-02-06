@@ -1,5 +1,5 @@
 module SessionHelper
-  def sign_in(params)
+  def sign_in(email, password, remember = nil)
     # Finding the user by the email entered
     user = User.find_by_email(params[:user][:email])
     # Preparing a response

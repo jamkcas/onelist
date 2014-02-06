@@ -3,6 +3,9 @@ class User < ActiveRecord::Base
 
   attr_accessible :auth_token, :email, :password, :password_confirmation, :username
 
+  has_many :item_users
+  has_many :items, through: :item_users
+
   validates :email, presence: true, uniqueness: true
 
   # Making sure an auth_token is generated and assigned to the user before saved
@@ -13,25 +16,5 @@ class User < ActiveRecord::Base
     begin
       self[column] = SecureRandom.urlsafe_base64
     end while User.exists?(column => self[column])
-  end
-
-  def self.saveUser(params, session)
-    # Creating a new user
-    user = User.new(params[:user])
-
-    # Preparing a response
-    response = {}
-    # If the user is successfully saved, the session user_id is set to the new user's id and a welcome notice is returned, else an error notice is returned
-    if user.save
-      session[:user_id] = user.id
-      response[:notice] = user.username.capitalize
-    else
-      response[:notice] = 'Sorry, we were unable to process your sign up request.'
-    end
-
-    # If errors exist an error array is returned
-    response[:errors] = user.errors.full_messages if user.errors
-    # Returning the response
-    response
   end
 end
