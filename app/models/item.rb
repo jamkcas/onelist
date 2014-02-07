@@ -22,14 +22,14 @@ class Item < ActiveRecord::Base
   end
 
   def self.fetchIncomplete(current_user)
-    items = current_user.items.where(complete: false)
+    items = current_user.items.where(complete: false).reverse
   end
 
   def self.fetchComplete(current_user)
-    items = current_user.items.where(complete: true)
+    items = current_user.items.where(complete: true).reverse
   end
 
   def self.updateItem(params)
-    Item.find(params[:item_id]).update_attributes(complete: params[:complete])
+    Item.find(params[:data][:item_id]).update_attributes(complete: params[:data][:complete])
   end
 end

@@ -10,7 +10,7 @@
     </header>
 
     <ul class='optionsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-      <li><a href='#/complete' class='goToComplete'><p>Show Completed</p></a></li>
+      <li><p change-page='#/complete'>Show Completed</p></li>
       <li><a href='#/complete'><p>Manage Labels</p></a></li>
       <li><a href='#/complete'><p>Edit Account</p></a></li>
       <li><a href='/sessions/id' data-method='delete'><p>Log Out</p></a></li>
@@ -27,7 +27,7 @@
           <button data-ng-click="addItem()"><i class="fa fa-plus"></i></button>
         </div>
       </li>
-      <li data-ng-repeat='item in items | filter:sort:title' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <li data-ng-repeat='item in items' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12' >
         <div class='listDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}'>
           <input type='checkbox' class='changeStatus complete col-lg-1 col-md-1 col-sm-1 col-xs-1' remove-item='deleteItem($index)' />
           <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>

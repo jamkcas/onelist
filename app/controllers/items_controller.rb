@@ -27,6 +27,8 @@ class ItemsController < ApplicationController
   end
 
   def changeStatus
+    p ('*') * 50
+    p params
     Item.updateItem(params) if current_user
 
     render text: 'Updated'

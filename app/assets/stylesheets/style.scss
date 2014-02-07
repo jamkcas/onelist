@@ -275,6 +275,7 @@ body {
       .listDetails {
         padding: 20px;
         background: $listBG;
+        -webkit-transition: all 0.3s ease-in;
 
         p {
           margin: 0px;

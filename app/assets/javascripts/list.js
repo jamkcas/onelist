@@ -23,14 +23,9 @@ var calculateOptionsWidth = function() {
   return $(window).width() * 0.8;
 };
 
-var changeLoc = function(loc) {
-  var width = calculateOptionsWidth();
-  $('.mainView').animate({ 'left': '0' });
-  $('.optionsView').animate({ 'left': -width }, {'complete': function() {
-      window.location = loc;
-    }
-  });
-};
+/*************************/
+/*** Module and Config ***/
+/*************************/
 
 var app = angular.module('oneListApp', ['ngRoute', 'ngAnimate']);
 
@@ -76,6 +71,16 @@ app.controller('completeController', function($scope, itemsFactory) {
   };
 
   init();
+
+  $scope.deleteItem = function(i) {
+    var data = {
+      heading: 'ajax request',
+      complete: false,
+      item_id: $scope.items[i].id
+    };
+    itemsFactory.removeItem(data).success(function(data) {});
+    $scope.items.splice(i, 1);
+  };
 });
 
 app.controller('incompleteController', function($scope, itemsFactory, sharedAttributesService) {
@@ -92,34 +97,20 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
     var title = $scope.newItem.title;
 
     itemsFactory.saveItem(title).success(function(data) {
-      $scope.items.push(data.item);
+      $scope.items.unshift(data.item);
       $scope.newItem.title = '';
     });
   };
 
   $scope.deleteItem = function(i) {
+    var data = {
+      heading: 'ajax request',
+      complete: true,
+      item_id: $scope.items[i].id
+    };
+    itemsFactory.removeItem(data).success(function(data) {});
     $scope.items.splice(i, 1);
   };
-});
-
-app.directive('removeItem', function() {
-  return function(scope, element, attrs) {
-    element.bind('click', function() {
-      var listItem = element.parent();
-      var width = listItem[0].offsetWidth.toString() + 'px';
-      var test = function() {
-        listItem.css('left', width);
-      };
-      var test2 = function() {
-        scope.$apply(attrs.removeItem);
-      };
-
-      test();
-      setTimeout(test2, 1000);
-
-    });
-
-  }
 });
 
 app.controller('loginController', function($scope, loginFactory, sharedAttributesService) {
@@ -183,8 +174,12 @@ app.factory('itemsFactory', function($http) {
   };
 
   factory.saveItem = function(title) {
-    return $http.post('/saveItem', { title: title })
+    return $http.post('/saveItem', { title: title });
   };
+
+  factory.removeItem = function(data) {
+    return $http.put('/changeStatus', { data: data });
+  }
 
   return factory;
 });
@@ -217,13 +212,72 @@ app.service('sharedAttributesService', function() {
   return service;
 });
 
+/******************/
+/*** Directives ***/
+/******************/
+
+app.directive('removeItem', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      var listItem = $(this).parent().parent();
+      listItem.animate({ 'left': listItem.width() }, { 'complete': function() {
+          listItem.animate({ 'height': '0' }, { 'complete': function() {
+              scope.$apply(attrs.removeItem);
+            }
+          });
+        }
+      });
+    });
+  }
+});
+
+app.directive('showOptions', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      // Defining the value to set the width of the options to and animate the main and options views to and from
+      var left = calculateOptionsWidth();
+      // Setting the height of the options window based on the greater of the heights between the main view and the window
+      setOptionsHeight();
+      // Animating main and options view depending on which one is being displayed
+      if($('.mainView').css('left') === '0px') {
+        $('.optionsView').css('left', -left);
+        $('.optionsView').css('width', left);
+        $('.mainView').animate({ 'left': left });
+        $('.optionsView').animate({ 'left': '0' });
+      } else {
+        $('.mainView').animate({ 'left': '0' });
+        $('.optionsView').animate({ 'left': -left });
+      }
+    });
+  }
+});
+
+app.directive('changePage', function() {
+  return {
+    scope: {},
+    link: function(scope, element, attrs) {
+      element.bind('click', function() {
+        var width = calculateOptionsWidth();
+        $('.mainView').animate({ 'left': '0' });
+        $('.optionsView').animate({ 'left': -width }, {'complete': function() {
+            window.location = attrs.changePage;
+          }
+        });
+      });
+    }
+  }
+});
+
+/***************/
+/*** Filters ***/
+/***************/
+
 
 /***************/
 /*** On Load ***/
 /***************/
 
 $(function() {
-  setEvents();
   // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
   if(gon.current_user === '') {
     window.location.replace('#/login');

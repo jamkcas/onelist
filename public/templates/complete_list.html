@@ -6,7 +6,7 @@
     </header>
 
     <ul class='optionsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-      <li><a href='#/incomplete' class='goToIncomplete'><p>Show To Do List</p></a></li>
+      <li><p change-page='#/incomplete'>Show To Do List</p></li>
       <li><a href='#/complete'><p>Manage Labels</p></a></li>
       <li><a href='#/complete'><p>Edit Account</p></a></li>
       <li><a href='/sessions/id' data-method='delete'><p>Log Out</p></a></li>
@@ -17,9 +17,9 @@
     <div data-ng-include src="'templates/header.html'"></div>
 
     <ul class='itemsList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
-      <li data-ng-repeat='item in items | filter:sort:title' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <li data-ng-repeat='item in items' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
         <div class='listDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}'>
-          <input type='checkbox' class='changeStatus uncomplete col-lg-1 col-md-1 col-sm-1 col-xs-1' checked/>
+          <input type='checkbox' class='changeStatus uncomplete col-lg-1 col-md-1 col-sm-1 col-xs-1' checked remove-item='deleteItem($index)'/>
           <p class='crossedOut col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
         </div>
       </li>
