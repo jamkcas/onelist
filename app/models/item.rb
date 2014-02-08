@@ -29,11 +29,15 @@ class Item < ActiveRecord::Base
     items = current_user.items.where(complete: true).reverse
   end
 
-  def self.updateItem(params)
+  def self.switchStatus(params)
     Item.find(params[:data][:item_id]).update_attributes(complete: params[:data][:complete])
   end
 
   def self.fetchItem(id)
     Item.find(id)
+  end
+
+  def self.changeItem(params)
+    Item.find(params[:data][:id]).update_attributes(title: params[:data][:title]) if params[:data][:title]
   end
 end

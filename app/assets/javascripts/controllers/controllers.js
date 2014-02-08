@@ -7,6 +7,7 @@ angular.module('oneListApp').controller('completeController', function($scope, i
     });
 
     $scope.nextPageTitle = 'Show To Do List';
+    $scope.index = 0;
   };
 
   init();
@@ -24,6 +25,7 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   };
 
   $scope.getItem = function(i) {
+    $scope.index = i;
     var header = 'ajax request';
     var id = $scope.items[i].id;
     itemsFactory.getItem(header, id).success(function(data) {
@@ -32,7 +34,16 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   };
 
   $scope.editTitle = function() {
-    console.log(this.item.title)
+    var data = {
+      header: 'ajax request',
+      title: this.item.title,
+      id: this.item.id
+    };
+    var title = this.item.title;
+
+    itemsFactory.updateItem(data).success(function(data) {
+      $scope.items[$scope.index].title = title;
+    });
   };
 
   $scope.changePage = function() {
@@ -49,6 +60,7 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     });
 
     $scope.nextPageTitle = 'Show Completed';
+    $scope.index = 0;
   };
 
   init();
@@ -75,6 +87,7 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   };
 
   $scope.getItem = function(i) {
+    $scope.index = i;
     var header = 'ajax request';
     var id = $scope.items[i].id;
     itemsFactory.getItem(header, id).success(function(data) {
@@ -83,7 +96,16 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   };
 
   $scope.editTitle = function() {
-    console.log(this.item.title)
+    var data = {
+      header: 'ajax request',
+      title: this.item.title,
+      id: this.item.id
+    };
+    var title = this.item.title;
+
+    itemsFactory.updateItem(data).success(function(data) {
+      $scope.items[$scope.index].title = title;
+    });
   };
 
   $scope.changePage = function() {
@@ -98,6 +120,7 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
       password: $scope.user.password,
       remember: $scope.user.remember
     }
+
     loginFactory.login(data).success(function(data) {
       if(data === 'Invalid email or password.') {
         var errors = document.getElementById('loginErrors');

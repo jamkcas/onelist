@@ -6,6 +6,7 @@ Onelist::Application.routes.draw do
   post '/saveItem', to: 'items#saveItem'
   put '/changeStatus', to: 'items#changeStatus'
   get '/getItem/:header/:id', to: 'items#getItem'
+  put '/updateItem', to: 'items#updateItem'
 
   resources :users, only: [:create, :update]
   resources :sessions, only: [:create, :destroy]

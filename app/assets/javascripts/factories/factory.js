@@ -21,6 +21,10 @@ angular.module('oneListApp').factory('itemsFactory', function($http) {
     return $http.get('/getItem/' + header + '/' + id);
   }
 
+  factory.updateItem = function(data) {
+    return $http.put('/updateItem', { data: data })
+  }
+
   return factory;
 });
 

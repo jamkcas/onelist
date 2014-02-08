@@ -27,7 +27,7 @@ class ItemsController < ApplicationController
   end
 
   def changeStatus
-    Item.updateItem(params) if current_user
+    Item.switchStatus(params) if current_user
 
     render text: 'Updated'
   end
@@ -36,5 +36,11 @@ class ItemsController < ApplicationController
     response = current_user && params[:header] == 'ajax request' ? Item.fetchItem(params[:id]) : 'Access Forbidden'
 
     render json: response
+  end
+
+  def updateItem
+    Item.changeItem(params) if current_user
+
+    render text: 'Updated'
   end
 end
