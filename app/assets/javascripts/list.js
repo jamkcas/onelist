@@ -118,11 +118,11 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
   init();
 
   $scope.addItem = function() {
-    var title = $scope.newItem.title;
+    var title = this.newItem;
 
     itemsFactory.saveItem(title).success(function(data) {
       $scope.items.unshift(data.item);
-      $scope.newItem.title = '';
+      this.newItem = '';
     });
   };
 

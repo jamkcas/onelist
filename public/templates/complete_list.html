@@ -4,16 +4,7 @@
 
   <div class='mainView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <div data-ng-include src="'templates/header.html'"></div>
-    <div class='listView'>
-      <ul class='itemsList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
-        <li data-ng-repeat='item in items' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-          <div class='listDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}' show-details='getItem($index)'>
-            <input type='checkbox' class='changeStatus uncomplete col-lg-1 col-md-1 col-sm-1 col-xs-1' checked remove-item='deleteItem($index)'/>
-            <p class='crossedOut col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
-          </div> <!-- end listDetails -->
-        </li> <!-- end listItem -->
-      </ul> <!-- end itemsList -->
-    </div> <!-- end listView -->
+    <div class='listView'  data-ng-include src="'templates/list_view.html'"></div>
   </div> <!-- end mainView -->
 
   <div class='detailsView' data-ng-include src="'templates/item_details.html'"></div>
