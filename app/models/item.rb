@@ -32,4 +32,8 @@ class Item < ActiveRecord::Base
   def self.updateItem(params)
     Item.find(params[:data][:item_id]).update_attributes(complete: params[:data][:complete])
   end
+
+  def self.fetchItem(id)
+    Item.find(id)
+  end
 end

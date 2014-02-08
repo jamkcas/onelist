@@ -10,17 +10,21 @@ var defineLeft = function() {
   return (-(parseInt($('.container').css('margin-left').match(/[0-9]+/)[0]) + 300)).toString() + 'px';
 };
 
-var setOptionsHeight = function() {
+var setHeight = function(elem) {
   if($(window).height() > $('.mainView').height()) {
     var height = $(window).height();
   } else {
     var height = $('.mainView').height();
   }
-  $('.optionsView').css('height', height);
+  elem.css('height', height);
 };
 
-var calculateOptionsWidth = function() {
-  return $(window).width() * 0.8;
+var calculateWidth = function(pct) {
+  return $('.mainView').width() * pct;
+};
+
+var toggleOverlay = function() {
+  $('.overlay').toggleClass('invisible');
 };
 
 /*************************/
@@ -65,9 +69,12 @@ app.config(["$httpProvider", function($httpProvider) {
 app.controller('completeController', function($scope, itemsFactory) {
   var init = function() {
     $scope.message = 'Welcome, ' + gon.current_user;
+
     itemsFactory.getCompleteItems().success(function(data) {
       $scope.items = data;
     });
+
+    $scope.nextPageTitle = 'Show To Do List';
   };
 
   init();
@@ -78,17 +85,34 @@ app.controller('completeController', function($scope, itemsFactory) {
       complete: false,
       item_id: $scope.items[i].id
     };
+
     itemsFactory.removeItem(data).success(function(data) {});
+
     $scope.items.splice(i, 1);
+  };
+
+  $scope.getItem = function(i) {
+    var header = 'ajax request';
+    var id = $scope.items[i].id;
+    itemsFactory.getItem(header, id).success(function(data) {
+      $scope.item = data;
+    });
+  };
+
+  $scope.editTitle = function() {
+    console.log(this.item.title)
   };
 });
 
 app.controller('incompleteController', function($scope, itemsFactory, sharedAttributesService) {
   var init = function() {
     $scope.message = 'Welcome, ' + gon.current_user;
+
     itemsFactory.getIncompleteItems().success(function(data) {
       $scope.items = data;
     });
+
+    $scope.nextPageTitle = 'Show Completed';
   };
 
   init();
@@ -108,8 +132,22 @@ app.controller('incompleteController', function($scope, itemsFactory, sharedAttr
       complete: true,
       item_id: $scope.items[i].id
     };
+
     itemsFactory.removeItem(data).success(function(data) {});
+
     $scope.items.splice(i, 1);
+  };
+
+  $scope.getItem = function(i) {
+    var header = 'ajax request';
+    var id = $scope.items[i].id;
+    itemsFactory.getItem(header, id).success(function(data) {
+      $scope.item = data;
+    });
+  };
+
+  $scope.editTitle = function() {
+    console.log(this.item.title)
   };
 });
 
@@ -181,6 +219,10 @@ app.factory('itemsFactory', function($http) {
     return $http.put('/changeStatus', { data: data });
   }
 
+  factory.getItem = function(header, id) {
+    return $http.get('/getItem/' + header + '/' + id);
+  }
+
   return factory;
 });
 
@@ -218,7 +260,9 @@ app.service('sharedAttributesService', function() {
 
 app.directive('removeItem', function() {
   return function(scope, element, attrs) {
-    element.bind('click', function() {
+    // When remove item is clicked the list item animates off the page, collapses then is removed from the scope
+    element.bind('click', function(event) {
+      event.stopImmediatePropagation();
       var listItem = $(this).parent().parent();
       listItem.animate({ 'left': listItem.width() }, { 'complete': function() {
           listItem.animate({ 'height': '0' }, { 'complete': function() {
@@ -234,20 +278,16 @@ app.directive('removeItem', function() {
 app.directive('showOptions', function() {
   return function(scope, element, attrs) {
     element.bind('click', function() {
+      toggleOverlay();
       // Defining the value to set the width of the options to and animate the main and options views to and from
-      var left = calculateOptionsWidth();
+      var width = calculateWidth(0.8);
       // Setting the height of the options window based on the greater of the heights between the main view and the window
-      setOptionsHeight();
-      // Animating main and options view depending on which one is being displayed
-      if($('.mainView').css('left') === '0px') {
-        $('.optionsView').css('left', -left);
-        $('.optionsView').css('width', left);
-        $('.mainView').animate({ 'left': left });
-        $('.optionsView').animate({ 'left': '0' });
-      } else {
-        $('.mainView').animate({ 'left': '0' });
-        $('.optionsView').animate({ 'left': -left });
-      }
+      setHeight($('.optionsView'));
+      // Animating options view
+      $('.optionsView').css('left', -width);
+      $('.optionsView').css('width', width);
+      $('.mainView').animate({ 'left': width });
+      $('.optionsView').animate({ 'left': '0' });
     });
   }
 });
@@ -257,14 +297,95 @@ app.directive('changePage', function() {
     scope: {},
     link: function(scope, element, attrs) {
       element.bind('click', function() {
-        var width = calculateOptionsWidth();
+        toggleOverlay();
+        // When change page is clicked the options view is animated closed and then the new main view page is displayed
+        var width = calculateWidth(0.8);
         $('.mainView').animate({ 'left': '0' });
         $('.optionsView').animate({ 'left': -width }, {'complete': function() {
-            window.location = attrs.changePage;
+            if(window.location.hash === '#/complete')
+              window.location = '#/incomplete';
+            else {
+              window.location = '#/complete';
+            }
           }
         });
       });
     }
+  }
+});
+
+app.directive('showDetails', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      scope.$apply(attrs.showDetails);
+      toggleOverlay();
+      var width = calculateWidth(0.95);
+      setHeight($('.detailsView'));
+      $('.detailsView').css('right', -width);
+      $('.detailsView').css('width', width);
+      $('.detailsView').animate({ 'right': '0' });
+    });
+  }
+});
+
+app.directive('back', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      toggleOverlay();
+      var width = $('.detailsView').width();
+      $('.detailsView').animate({ 'right': -(width + 5) });
+    });
+  }
+});
+
+app.directive('hide', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      toggleOverlay();
+      if($('mainView').css('left') != '0px') {
+        var width = calculateWidth(0.8);
+        $('.mainView').animate({ 'left': '0' });
+        $('.optionsView').animate({ 'left': -width });
+      }
+      if($('.detailsView').css('right') === '0px') {
+        var width = calculateWidth(0.95);
+        $('.detailsView').animate({ 'right': -(width + 5) });
+      }
+    });
+  }
+});
+
+app.directive('title', function() {
+  return function(scope,element, attrs) {
+    var populateField = function() {
+      var val = attrs.placeholder;
+      element.val(val);
+    };
+
+    element.bind('focus', populateField);
+    element.bind('click', populateField);
+  }
+});
+
+app.directive('editTitle', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      $('.changeTitle').css('height', '75px');
+      $(this).fadeOut(200);
+    });
+  }
+});
+
+app.directive('doneTitle', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      scope.$apply(attrs.doneTitle);
+
+      $('.changeTitle').css('height', '0px');
+      setTimeout(function() {
+        $('.editTitle').fadeIn(200);
+      }, 300);
+    });
   }
 });
 
@@ -285,21 +406,27 @@ $(function() {
 
   // Making sure the container covers at least the height of the window
   $('.container').css('min-height', $(window).height());
+
   // On resize,
   window.onresize = function() {
     // Making sure the container covers at least the height of the window
     $('.container').css('min-height', $(window).height());
-    // Setting the height of the options view when window is resized
-    setOptionsHeight();
+    // Setting the height of the options and details views when window is resized
+    setHeight($('.optionsView'));
+    setHeight($('.detailsView'));
     // Resetting the main and option views if window is resized > 768px
     if($(window).width() > 768) {
       $('.mainView').css('left', '0px');
       $('.optionsView').css('left', -($('.optionsView').width()));
     }
-    // Adjusting the options width based on the window width if options are being displayed
+    // Adjusting the options width based on the main view width if options are being displayed
     if($('.mainView').css('left') != '0px') {
-      $('.optionsView').css('width', calculateOptionsWidth());
-      $('.mainView').css('left', calculateOptionsWidth());
+      $('.optionsView').css('width', calculateWidth(0.8));
+      $('.mainView').css('left', calculateWidth(0.8));
+    }
+    // Adjusting the details width based on the main view width if dtails are being displayed
+    if($('.detailsView').css('right') === '0px') {
+      $('.detailsView').css('width', calculateWidth(0.95));
     }
   };
 });
