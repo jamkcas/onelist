@@ -3,6 +3,7 @@ class ItemUser < ActiveRecord::Base
 
   belongs_to :item
   belongs_to :user
+  has_many :keywords
 
   def self.saveItemUser(current_id, item_id, creator)
     ItemUser.create(user_id: current_id, item_id: item_id, creator: creator)

@@ -21,23 +21,49 @@ class Item < ActiveRecord::Base
     return response
   end
 
+  def self.createHash(current_user, items)
+    itemsHash = []
+    items.each do |item|
+      newItem = {}
+      id = current_user.item_users.where(item_id: item.id)[0]
+
+      tags = Keyword.find_all_by_item_user_id(id)
+      keywords = []
+      tags.each { |tag| keywords.push(tag.name) }
+
+      newItem[:id] = item.id
+      newItem[:keywords] = keywords
+      newItem[:title] = item.title
+      newItem[:complete] = item.complete
+      newItem[:updated_at] = item.updated_at
+      newItem[:created_at] = item.created_at
+      itemsHash.push(newItem)
+    end
+    itemsHash
+  end
+
   def self.fetchIncomplete(current_user)
     items = current_user.items.where(complete: false).reverse
+    itemsHash = self.createHash(current_user, items)
   end
 
   def self.fetchComplete(current_user)
     items = current_user.items.where(complete: true).reverse
+    itemsHash = self.createHash(current_user, items)
   end
 
   def self.switchStatus(params)
     Item.find(params[:data][:item_id]).update_attributes(complete: params[:data][:complete])
   end
 
-  def self.fetchItem(id)
-    Item.find(id)
-  end
-
-  def self.changeItem(params)
+  def self.changeItem(params, current_user)
     Item.find(params[:data][:id]).update_attributes(title: params[:data][:title]) if params[:data][:title]
+
+    if params[:data][:keywords]
+      id = current_user.item_users.where(item_id: params[:data][:id])[0].id
+      keywords = Keyword.saveKeywords(id, params[:data][:keywords])
+    end
+
+    response = params[:data][:keywords] ? keywords : 'Updated'
   end
 end

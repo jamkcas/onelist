@@ -7,17 +7,19 @@
       <i class="fa fa-pencil-square-o editTitle col-lg-2 col-md-2 col-sm-2 col-xs-2" edit-title></i>
       <div class='changeTitle col-lg-12 col-md-12 col-sm-12 col-xs-12'>
         <input type='text' placeholder='{{ item.title }}' data-ng-model='item.title' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' title/>
-        <button done-title='editTitle()'>Done</button>
+        <button done-title='editTitle()'>Update Title</button>
       </div>
     </li>
 
     <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12' >
-      <label class='col-lg-10 col-md-10 col-sm-10 col-xs-10'>Item Keywords (optional)</label>
-      <i class="fa fa-pencil-square-o col-lg-2 col-md-2 col-sm-2 col-xs-2" data-ng-show='item.keywords'></i>
-      <ul data-ng-show='item.keywords'>
-        <li data-ng-repeat='keyword in item.keywords'>{{ keyword }}</p>
+      <label class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>Item Keywords (optional)</label>
+      <ul data-ng-show='item.keywords' class='keywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+        <li data-ng-repeat='keyword in item.keywords'><button>{{ keyword }}<span data-ng-click='deleteKeyword($index)'>x</span></button></li>
       </ul>
-      <input type='text' placeholder='Enter keywords, separated by commas' data-ng-model='item.keywords' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-show='!item.keywords' />
+      <div class='changeKeywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+        <input type='text' placeholder='Enter keywords, separated by commas' data-ng-model='newKeywords' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' />
+        <button add-keywords='addKeywords()'>Add Keywords</button>
+      </div>
      <!--  <ul class='itemKeywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
         <li data-ng-repeat='keyword in keywords'>{{ keyword }}<span>x</span></li>
       </ul> -->
@@ -41,10 +43,6 @@
           <input type='date' data-ng-model='edit.date' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' />
         </div>
       </div>
-    </li>
-
-    <li class='itemSubmitButton col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-      <button>Update</button>
     </li>
   </ul>
 </form>

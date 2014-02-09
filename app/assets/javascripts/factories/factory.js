@@ -15,15 +15,15 @@ angular.module('oneListApp').factory('itemsFactory', function($http) {
 
   factory.removeItem = function(data) {
     return $http.put('/changeStatus', { data: data });
-  }
-
-  factory.getItem = function(header, id) {
-    return $http.get('/getItem/' + header + '/' + id);
-  }
+  };
 
   factory.updateItem = function(data) {
-    return $http.put('/updateItem', { data: data })
-  }
+    return $http.put('/updateItem', { data: data });
+  };
+
+  factory.deleteKeyword = function(data) {
+    return $http.delete('/deleteKeyword/' + data.id + '/' + data.keyword);
+  };
 
   return factory;
 });
@@ -42,7 +42,7 @@ angular.module('oneListApp').factory('loginFactory', function($http) {
   return factory;
 });
 
-app.factory('sharedAttributesService', function() {
+app.factory('sharedAttributesFactory', function() {
   var factory = {};
 
   factory.setMessage = function(msg) {

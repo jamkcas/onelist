@@ -1,3 +1,4 @@
+// Function for displaying errors
 var postErrors = function(elem, msg) {
   var error = document.createElement('li');
   error.className = 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12';
@@ -10,15 +11,19 @@ var defineLeft = function() {
   return (-(parseInt($('.container').css('margin-left').match(/[0-9]+/)[0]) + 300)).toString() + 'px';
 };
 
+// Function to set element height to either the mainView height or the window height depending which is bigger
 var setHeight = function(elem) {
   if($(window).height() > $('.mainView').height()) {
     var height = $(window).height();
   } else {
     var height = $('.mainView').height();
   }
-  elem.css('height', height);
+  if(height > elem.height()) {
+    elem.css('height', $(window).height());
+  }
 };
 
+// Function to calculate width for details or options views
 var calculateWidth = function(pct) {
   return $('.mainView').width() * pct;
 };
@@ -27,6 +32,7 @@ var toggleOverlay = function() {
   $('.overlay').toggleClass('invisible');
 };
 
+// Function to hide the details view page
 var hideDetails = function() {
   var width = calculateWidth(0.95);
   $('.detailsView').animate({ 'right': -(width + 5) }, {'complete': function() {
@@ -66,6 +72,7 @@ app.config(function($routeProvider) {
     .otherwise({ redirectTo: '/login' });
 });
 
+// Configuration to deal with csrf-token
 app.config(["$httpProvider", function($httpProvider) {
   var token = $('meta[name=csrf-token]').attr('content');
   $httpProvider.defaults.headers.common['X-CSRF-Token'] = token;

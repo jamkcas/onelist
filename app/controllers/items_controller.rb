@@ -32,15 +32,15 @@ class ItemsController < ApplicationController
     render text: 'Updated'
   end
 
-  def getItem
-    response = current_user && params[:header] == 'ajax request' ? Item.fetchItem(params[:id]) : 'Access Forbidden'
+  def updateItem
+    response = Item.changeItem(params, current_user) if current_user
 
     render json: response
   end
 
-  def updateItem
-    Item.changeItem(params) if current_user
+  def deleteKeyword
+    Keyword.deleteKeyword(params, current_user) if current_user
 
-    render text: 'Updated'
+    render text: 'Deleted'
   end
 end
