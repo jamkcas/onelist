@@ -14,7 +14,7 @@
     <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12' >
       <label class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>Item Keywords (optional)</label>
       <ul data-ng-show='item.keywords' class='keywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-        <li data-ng-repeat='keyword in item.keywords'><button>{{ keyword }}<span data-ng-click='deleteKeyword($index)'>x</span></button></li>
+        <li data-ng-repeat='keyword in item.keywords'><button>{{ keyword.name }}<span hide-keyword='deleteKeyword($index)'>x</span></button></li>
       </ul>
       <div class='changeKeywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
         <input type='text' placeholder='Enter keywords, separated by commas' data-ng-model='newKeywords' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' />

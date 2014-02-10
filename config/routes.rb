@@ -6,7 +6,7 @@ Onelist::Application.routes.draw do
   post '/saveItem', to: 'items#saveItem'
   put '/changeStatus', to: 'items#changeStatus'
   put '/updateItem', to: 'items#updateItem'
-  delete '/deleteKeyword/:id/:keyword', to: 'items#deleteKeyword'
+  delete '/deleteKeyword/:id', to: 'items#deleteKeyword'
 
   resources :users, only: [:create, :update]
   resources :sessions, only: [:create, :destroy]

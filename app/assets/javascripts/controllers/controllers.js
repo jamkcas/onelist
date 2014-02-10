@@ -118,8 +118,9 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     this.newKeywords = '';
     // Making a put request to save the keywords to the item and updating the item.keywords in the current scope
     itemsFactory.updateItem(data).success(function(data) {
+      console.log(data)
       // If the current item has keywords already then the new keywords are added to the array, otherwise the new keywords are set ad the item.keywords for the current item
-      if($scope.items[$scope.index].keywords) {
+      if($scope.items[$scope.index].keywords.length > 0) {
         for(var i = 0; i < data.length; i ++) {
           $scope.items[$scope.index].keywords.push(data[i]);
         }
@@ -130,14 +131,11 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   }
 
   $scope.deleteKeyword = function(i) {
-    var data = {
-      keyword: this.item.keywords[i],
-      id: this.item.id
-    }
+    var keyword = this.item.keywords[i].id
     // Grabbing the current keywords for this item
     var keywords = this.item.keywords;
     // Making a delete request to delete current keyword
-    itemsFactory.deleteKeyword(data).success(function(data) {
+    itemsFactory.deleteKeyword(keyword).success(function(data) {
       // Removing the keyword from the item keywords in current scope
       keywords.splice(i, 1);
     });

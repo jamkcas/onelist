@@ -39,7 +39,7 @@ class ItemsController < ApplicationController
   end
 
   def deleteKeyword
-    Keyword.deleteKeyword(params, current_user) if current_user
+    Keyword.deleteKeyword(params) if current_user
 
     render text: 'Deleted'
   end

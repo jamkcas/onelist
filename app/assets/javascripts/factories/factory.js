@@ -22,7 +22,7 @@ angular.module('oneListApp').factory('itemsFactory', function($http) {
   };
 
   factory.deleteKeyword = function(data) {
-    return $http.delete('/deleteKeyword/' + data.id + '/' + data.keyword);
+    return $http.delete('/deleteKeyword/' + data);
   };
 
   return factory;

@@ -29,7 +29,10 @@ class Item < ActiveRecord::Base
 
       tags = Keyword.find_all_by_item_user_id(id)
       keywords = []
-      tags.each { |tag| keywords.push(tag.name) }
+      tags.each do |tag|
+        new_tag = { name: tag.name, id: tag.id }
+        keywords.push(new_tag)
+      end
 
       newItem[:id] = item.id
       newItem[:keywords] = keywords

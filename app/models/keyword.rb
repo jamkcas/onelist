@@ -7,14 +7,16 @@ class Keyword < ActiveRecord::Base
 
   def self.saveKeywords(id, keywords)
     tags = keywords.split(',')
+    keywords = []
     tags.each do |tag|
-      Keyword.create(name: tag.strip, item_user_id: id)
+      keyword = Keyword.create(name: tag.strip, item_user_id: id)
+      new_tag = { name: keyword.name, id: keyword.id }
+      keywords.push(new_tag)
     end
-    tags
+    keywords
   end
 
-  def self.deleteKeyword(params, current_user)
-    id = current_user.item_users.where(item_id: params[:id])[0]
-    ItemUser.find(id).keywords.where(name: params[:keyword])[0].delete
+  def self.deleteKeyword(params)
+    Keyword.find(params[:id]).delete
   end
 end

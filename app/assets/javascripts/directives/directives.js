@@ -153,3 +153,17 @@ angular.module('oneListApp').directive('changePage', function() {
     });
   }
 });
+
+angular.module('oneListApp').directive('hideKeyword', function ($animate) {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      // When the 'x' button is clicked for a keyword the keyword fades out
+      $(this).parent().parent().css('opacity', '0');
+
+      setTimeout(function() {
+        // After 4/10 of a second, the delete keyword function is invoked to delete the current keyword
+        scope.$apply(attrs.hideKeyword);
+      }, 400);
+    });
+  }
+});
