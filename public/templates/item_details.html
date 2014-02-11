@@ -16,7 +16,7 @@
       <label class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>Item Keywords</label>
 
       <ul data-ng-show='item.keywords' class='keywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-        <li data-ng-repeat='keyword in item.keywords'><button>{{ keyword.name }}<span hide-keyword='deleteKeyword($index)'>x</span></button></li>
+        <li data-ng-repeat='keyword in item.keywords'><button>{{ keyword }}<span hide-keyword='deleteKeyword($index)'>x</span></button></li>
       </ul> <!-- end keywords -->
 
       <div class='changeKeywords col-lg-12 col-md-12 col-sm-12 col-xs-12'>

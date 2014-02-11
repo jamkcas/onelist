@@ -6,14 +6,18 @@ class Keyword < ActiveRecord::Base
   validates :name, presence: true
 
   def self.saveKeywords(id, keywords)
+    # Splitting the keyword string into an array of keywords
     tags = keywords.split(',')
-    keywords = []
+    tag_names = []
+    tag_ids = []
+    # Saving the keywords and preparing keyword and keyword id arrays to be returned
     tags.each do |tag|
       keyword = Keyword.create(name: tag.strip, item_user_id: id)
-      new_tag = { name: keyword.name, id: keyword.id }
-      keywords.push(new_tag)
+      tag_names.push(keyword.name)
+      tag_ids.push(keyword.id)
     end
-    keywords
+    # Returning an array with keywords and ids arrays
+    keywords = [tag_names, tag_ids]
   end
 
   def self.deleteKeyword(params)

@@ -28,17 +28,16 @@ class Item < ActiveRecord::Base
       id = current_user.item_users.where(item_id: item.id)[0]
 
       tags = Keyword.find_all_by_item_user_id(id)
-      keywords = []
-      keywordList = []
+      tag_ids = []
+      tag_names = []
       tags.each do |tag|
-        new_tag = { name: tag.name, id: tag.id }
-        keywords.push(new_tag)
-        keywordList.push(tag.name)
+        tag_ids.push(tag.id)
+        tag_names.push(tag.name)
       end
 
       newItem[:id] = item.id
-      newItem[:keywords] = keywords
-      newItem[:keywordList] = keywordList.join(', ')
+      newItem[:keywords] = tag_names
+      newItem[:keywordIds] = tag_ids
       newItem[:title] = item.title
       newItem[:complete] = item.complete
       newItem[:notes] = item.note

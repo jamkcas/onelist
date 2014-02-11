@@ -33,8 +33,6 @@ class ItemsController < ApplicationController
   end
 
   def updateItem
-    p ('*') * 50
-    p params[:data][:due_date]
     response = Item.changeItem(params, current_user) if current_user
 
     render json: response
