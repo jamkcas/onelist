@@ -1,3 +1,7 @@
+/*************************/
+/*** Utility Functions ***/
+/*************************/
+
 // Function for displaying errors
 var postErrors = function(elem, msg) {
   var error = document.createElement('li');

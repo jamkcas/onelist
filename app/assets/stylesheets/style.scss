@@ -1,23 +1,48 @@
 @font-face {
-    font-family: 'scratchregular';
-    src: url('/fonts/Scratch_-webfont.eot');
-    src: url('/fonts/Scratch_-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/Scratch_-webfont.woff') format('woff'),
-         url('/fonts/Scratch_-webfont.ttf') format('truetype'),
-         url('/fonts/Scratch_-webfont.svg#scratchregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'scratchregular';
+  src: url('/fonts/Scratch_-webfont.eot');
+  src: url('/fonts/Scratch_-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/Scratch_-webfont.woff') format('woff'),
+       url('/fonts/Scratch_-webfont.ttf') format('truetype'),
+       url('/fonts/Scratch_-webfont.svg#scratchregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'arsenalregular';
-    src: url('/fonts/arsenal-regular-webfont.eot');
-    src: url('/fonts/arsenal-regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('/fonts/arsenal-regular-webfont.woff') format('woff'),
-         url('/fonts/arsenal-regular-webfont.ttf') format('truetype'),
-         url('/fonts/arsenal-regular-webfont.svg#arsenalregular') format('svg');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'arsenalregular';
+  src: url('/fonts/arsenal-regular-webfont.eot');
+  src: url('/fonts/arsenal-regular-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/arsenal-regular-webfont.woff') format('woff'),
+       url('/fonts/arsenal-regular-webfont.ttf') format('truetype'),
+       url('/fonts/arsenal-regular-webfont.svg#arsenalregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'RaphaelIcons';
+  src: url('/fonts/raphaelicons-webfont.eot');
+  src: local('☺'), url('/fonts/raphaelicons-webfont.woff') format('woff'),
+       url('/fonts/raphaelicons-webfont.ttf') format('truetype'),
+       url('/fonts/raphaelicons-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'modern_pictogramsnormal';
+  src: url('/fonts/modernpics-webfont.eot');
+  src: url('/fonts/modernpics-webfont.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/modernpics-webfont.woff') format('woff'),
+       url('/fonts/modernpics-webfont.ttf') format('truetype'),
+       url('/fonts/modernpics-webfont.svg#modern_pictogramsnormal') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  outline: none;
 }
 
 $radialBG: -webkit-radial-gradient(center, ellipse cover, #8952c1 0%, #5f2f90 100%);
@@ -247,17 +272,29 @@ body {
     .searchFilters {
       padding: 0px;
       text-align: center;
+      position: relative;
+
+      .searchOverlay {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -100;
+        opacity: 0;
+        height: 0px;
+      }
 
       .searchLabels, .searchItems {
         padding: 20px;
         background: $radialBG;
         border-top: 1px solid black;
         border-bottom: 1px solid black;
+        cursor: pointer;
 
         p {
           margin: 0px;
           font-size: 16px;
           line-height: 16px;
+          -webkit-transition: all 0.3s ease-in;
         }
       }
 
@@ -279,13 +316,72 @@ body {
       }
 
       .addItem {
-        padding: 20px;
+        padding: 0 20px;
+        min-height: 0px;
+        cursor: default;
 
         input {
           padding: 5px 10px;
           font-size: 18px;
           line-height: 23px;
           border-radius: 8px;
+          margin: 20px 0;
+        }
+
+        .buttons {
+          button {
+            padding: 8px 10px;
+            border-radius: 8px;
+            font-size: 21px;
+            background: -webkit-linear-gradient(top, white 0%, #878787 100%);
+            border: 0px;
+            margin: 20px 0;
+            cursor: pointer;
+          }
+        }
+      }
+
+      .searchWindow {
+        @extend .addItem;
+        height: 0px;
+        overflow: hidden;
+        border-bottom: 0px;
+        position: relative;
+
+        input {
+          padding-left: 35px;
+          padding-right: 35px;
+        }
+
+        button {
+          background: none;
+          position: absolute;
+          border: none;
+          padding: 0px;
+          margin: 0px;
+          top: 23px;
+          right: 28px;
+          outline: none;
+
+          p {
+            font: normal 35px/35px 'modern_pictogramsnormal';
+            // text-shadow: 0px 1px 0.5px black;
+          }
+        }
+
+        .search {
+          position: absolute;
+          font: normal 30px/30px 'RaphaelIcons';
+          top: 23px;
+          left: 30px;
+        }
+      }
+
+      .filterWindow {
+        @extend .searchWindow;
+
+        input {
+          padding-left: 10px;
         }
       }
 
@@ -324,15 +420,7 @@ body {
       }
     }
 
-    .newItemButton {
-      button {
-        padding: 8px 10px;
-        border-radius: 8px;
-        font-size: 21px;
-        background: -webkit-linear-gradient(top, white 0%, #878787 100%);
-        border: 0px;
-      }
-    }
+
   }
 }
 

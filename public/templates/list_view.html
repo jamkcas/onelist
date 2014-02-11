@@ -1,12 +1,24 @@
 <ul class='itemsList col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 col-xs-offset-0'>
   <li class='addItem col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-if='complete === false'>
     <input type='text' data-ng-model='newItem' class='newItem col-lg-11 col-md-11 col-sm-11 col-xs-10' placeholder='Add an item' />
-    <div class='newItemButton col-lg-1 col-md-1 col-sm-1 col-xs-2'>
+    <div class='buttons col-lg-1 col-md-1 col-sm-1 col-xs-2'>
       <button data-ng-click="addItem()"><i class="fa fa-plus"></i></button>
-    </div> <!-- end newItemButton -->
+    </div> <!-- end buttons -->
   </li> <!-- end addItem -->
 
-  <li data-ng-repeat='item in items' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12' >
+  <li class='searchWindow col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <input type='text' data-ng-model='searchTerm.title' class='searchFieldcol-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Search for an item' />
+    <p class='search'>z</p>
+    <button done-searching='doneSearching()' class='doneSearching'><p>x</p></button>
+  </li>
+
+  <li class='filterWindow col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <input type='text' data-ng-model='searchTerm.keywordList' class='searchField col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Search for an item' />
+    <!-- <p class='search'>z</p> -->
+    <button done-filtering='doneSearching()' class='doneSearching'><p>x</p></button>
+  </li>
+
+  <li data-ng-repeat='item in items | filter:searchTerm' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12' >
     <div class='incompleteListDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}' show-details='getItem($index)'data-ng-show='complete === false'>
       <input type='checkbox' class='changeStatus complete col-lg-1 col-md-1 col-sm-1 col-xs-1' remove-item='removeItem($index)' />
       <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>

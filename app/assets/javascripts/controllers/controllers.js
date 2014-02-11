@@ -38,6 +38,14 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   $scope.changePage = function() {
     window.location = '#/incomplete';
   };
+
+  $scope.doneSearching = function() {
+    // Restting the searchTerm when done searching
+    if(this.searchTerm) {
+      this.searchTerm.title = '';
+      this.searchTerm.keywordList = '';
+    }
+  };
 });
 
 
@@ -122,6 +130,15 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     window.location = '#/complete';
   };
 
+  $scope.setKeywordList = function() {
+    // Going through all the keywords for the current item and creating a string to use in tag filtering
+    var tags = [];
+    for(var keyword in $scope.items[$scope.index].keywords) {
+      tags.push($scope.items[$scope.index].keywords[keyword].name);
+    }
+    $scope.items[$scope.index].keywordList = tags.join(', ');
+  };
+
   $scope.addKeywords = function() {
     var data = {
       header: 'ajax request',
@@ -133,13 +150,16 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     // Making a put request to save the keywords to the item and updating the item.keywords in the current scope
     itemsFactory.updateItem(data).success(function(data) {
       // If the current item has keywords already then the new keywords are added to the array, otherwise the new keywords are set ad the item.keywords for the current item
-      if($scope.items[$scope.index].keywords.length > 0) {
+      // console.log()
+      if($scope.items[$scope.index].keywords !== undefined && $scope.items[$scope.index].keywords.length > 0) {
         for(var i = 0; i < data.length; i ++) {
           $scope.items[$scope.index].keywords.push(data[i]);
         }
       } else {
         $scope.items[$scope.index].keywords = data;
       }
+      // Setting the keywordList for tag filtering
+      $scope.setKeywordList();
     });
   }
 
@@ -151,6 +171,8 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     itemsFactory.deleteKeyword(keyword).success(function(data) {
       // Removing the keyword from the item keywords in current scope
       keywords.splice(i, 1);
+      // Setting the keyword list for tag filtering
+      $scope.setKeywordList();
     });
   };
 
@@ -183,6 +205,14 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
         // Setting the due date scope to true for the current item
         $scope.due_date = true;
       });
+    }
+  };
+
+  $scope.doneSearching = function() {
+    // Restting the searchTerm when done searching
+    if(this.searchTerm) {
+      this.searchTerm.title = '';
+      this.searchTerm.keywordList = '';
     }
   };
 });

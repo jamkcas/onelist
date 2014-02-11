@@ -194,3 +194,93 @@ angular.module('oneListApp').directive('doneDuedate', function() {
     });
   }
 });
+
+angular.module('oneListApp').directive('searchItems', function() {
+  return function(scope, element, attrs) {
+    // When Search Item button is clicked the search item input is displayed and the add item input is hidden
+    element.bind('click', function() {
+      // Displaying the search overlay to prevent searchFilter buttons from being clicked
+      $('.searchOverlay').css('height', $('.searchFilters').height());
+      $('.searchOverlay').css('z-index', '200');
+      // Hiding the add item input(if it is showing) and displaying the search item input
+      if($('.addItem').css('visibility') === 'visible') {
+        $('.addItem').animate({ 'height': '0px' }, { 'complete': function() {
+            $('.addItem').css({ 'border-bottom': '0px' });
+            $('.searchWindow').css({ 'border-bottom': '1px solid black' });
+            $('.searchWindow').animate({ 'height': '78px' });
+          }
+        });
+      } else {
+        $('.searchWindow').css({ 'border-bottom': '1px solid black' });
+        $('.searchWindow').animate({ 'height': '78px' });
+      }
+      // Hiding the filter labels title text
+      $('.searchLabels p').css('opacity', '0');
+    });
+  }
+});
+
+angular.module('oneListApp').directive('doneSearching', function() {
+  return function(scope, element, attrs) {
+    // When x button is clicked the add item input is displayed and the search item input is hidden
+    element.bind('click', function() {
+      $('.searchOverlay').css('z-index', '-100');
+      // Hiding the search item input and displaying the add item input
+      $('.searchWindow').animate({ 'height': '0px' }, { 'complete': function() {
+          $('.searchWindow').css({ 'border-bottom': '0px' });
+          $('.addItem').css({ 'border-bottom': '1px solid black' });
+          $('.addItem').animate({ 'height': '78px' });
+          // Invoking the done searching function on current scope to clear the search filter results
+          scope.$apply(attrs.doneSearching);
+        }
+      });
+      // Displaying the filter labels title text
+      $('.searchLabels p').css('opacity', '1');
+    });
+  }
+});
+
+angular.module('oneListApp').directive('filterLabels', function() {
+  return function(scope, element, attrs) {
+    // When filter label button is clicked the filter label input is displayed and the add item input is hidden
+    element.bind('click', function() {
+      // Displaying the search overlay to prevent searchFilter buttons from being clicked
+      $('.searchOverlay').css('height', $('.searchFilters').height());
+      $('.searchOverlay').css('z-index', '200');
+      // Hiding the add item input(if it is being displayed) and displaying the filter label input
+      if($('.addItem').css('visibility') === 'visible') {
+        $('.addItem').animate({ 'height': '0px' }, { 'complete': function() {
+            $('.addItem').css({ 'border-bottom': '0px' });
+            $('.filterWindow').css({ 'border-bottom': '1px solid black' });
+            $('.filterWindow').animate({ 'height': '78px' });
+          }
+        });
+      } else {
+        $('.filterWindow').css({ 'border-bottom': '1px solid black' });
+        $('.filterWindow').animate({ 'height': '78px' });
+      }
+      // Hiding the search items title text
+      $('.searchItems p').css('opacity', '0');
+    });
+  }
+});
+
+angular.module('oneListApp').directive('doneFiltering', function() {
+  return function(scope, element, attrs) {
+    // When x button is clicked the add item input is displayed and the filter label input is hidden
+    element.bind('click', function() {
+      $('.searchOverlay').css('z-index', '-100');
+      // Hiding the filter label input and displaying the add item input
+      $('.filterWindow').animate({ 'height': '0px' }, { 'complete': function() {
+          $('.filterWindow').css({ 'border-bottom': '0px' });
+          $('.addItem').css({ 'border-bottom': '1px solid black' });
+          $('.addItem').animate({ 'height': '78px' });
+          // Invoking the done searching function on current scope to clear the filter label results
+          scope.$apply(attrs.doneFiltering);
+        }
+      });
+      // Displaying the search items title text
+      $('.searchItems p').css('opacity', '1');
+    });
+  }
+});
