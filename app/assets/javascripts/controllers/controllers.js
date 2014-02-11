@@ -54,21 +54,28 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     $scope.nextPageTitle = 'Show Completed';
     // Setting index for use when updating items
     $scope.index = 0;
-
+    // Setting initial statuses of item attributes to false
     $scope.complete = false;
+    $scope.notes = false;
+    $scope.due_date = false;
   };
 
   init();
 
   $scope.addItem = function() {
     var title = this.newItem;
-    // Making a post request to save a new item
-    itemsFactory.saveItem(title).success(function(data) {
-      // Adding the item to the beginning of the items list in current scope
-      $scope.items.unshift(data.item);
-      // Clearing the new item field
-      this.newItem = '';
-    });
+    // Resetting newItem attribute on the current scope
+    this.newItem = '';
+    // Checking to see if there is a value in the newItem field, and saving the new item if so
+    if(title !== undefined && title !== '') {
+      // Making a post request to save a new item
+      itemsFactory.saveItem(title).success(function(data) {
+        // Adding the item to the beginning of the items list in current scope
+        $scope.items.unshift(data.item);
+        // Clearing the new item input
+        $('.newItem').val('');
+      });
+    }
   };
 
   $scope.removeItem = function(i) {
@@ -87,7 +94,14 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     // Setting the index for use in the details view
     $scope.index = i;
     // Setting the item scope to the current item
-    $scope.item = $scope.items[i]
+    $scope.item = $scope.items[i];
+
+    $scope.notes = $scope.item.notes ? true : false;
+    $scope.due_date = $scope.item.due_date ? true : false;
+  };
+
+  $scope.clearScope = function() {
+    $scope.item = '';
   };
 
   $scope.editTitle = function() {
@@ -118,7 +132,6 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     this.newKeywords = '';
     // Making a put request to save the keywords to the item and updating the item.keywords in the current scope
     itemsFactory.updateItem(data).success(function(data) {
-      console.log(data)
       // If the current item has keywords already then the new keywords are added to the array, otherwise the new keywords are set ad the item.keywords for the current item
       if($scope.items[$scope.index].keywords.length > 0) {
         for(var i = 0; i < data.length; i ++) {
@@ -139,6 +152,38 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
       // Removing the keyword from the item keywords in current scope
       keywords.splice(i, 1);
     });
+  };
+
+  $scope.addNotes = function() {
+    var data = {
+      header: 'ajax request',
+      note: this.item.notes,
+      id: this.item.id
+    }
+    // Making a put request to save notes for the current item
+    itemsFactory.updateItem(data).success(function(data) {
+      // Putting the notes input field background to its original state
+      revertBackground();
+    });
+  };
+
+  $scope.addDatetime = function() {
+    // Creating a new formatted datetime object with the inputted time and date
+    var time = new Date(this.item.date + ' ' + this.item.time).toLocaleString();
+    // Checking to see if a valid date is enetered
+    if(time.toString() !== 'Invalid Date') {
+      var data = {
+        due_date: time,
+        id: this.item.id
+      };
+      // Making a put request to save due date for current item
+      itemsFactory.updateItem(data).success(function(data) {
+        // Setting the current item's due date attribute on the current scope
+        $scope.items[$scope.index].due_date = time;
+        // Setting the due date scope to true for the current item
+        $scope.due_date = true;
+      });
+    }
   };
 });
 

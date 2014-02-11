@@ -18,8 +18,9 @@ var setHeight = function(elem) {
   } else {
     var height = $('.mainView').height();
   }
+  // Changing the height if the window or main view height is greater than the elements height
   if(height > elem.height()) {
-    elem.css('height', $(window).height());
+    elem.css('height', height);
   }
 };
 
@@ -32,14 +33,9 @@ var toggleOverlay = function() {
   $('.overlay').toggleClass('invisible');
 };
 
-// Function to hide the details view page
-var hideDetails = function() {
-  var width = calculateWidth(0.95);
-  $('.detailsView').animate({ 'right': -(width + 5) }, {'complete': function() {
-      $('.changeTitle').css('height', '0px');
-      $('.editTitle').fadeIn(200);
-    }
-  });
+var revertBackground = function() {
+  $('.notes').css('background', '-webkit-radial-gradient(center, cover ellipse, #ffffff 0%, #ffffff 60%, #dedede 100%)');
+  $('.notes').css('color', '#878787');
 };
 
 /*************************/
@@ -108,7 +104,7 @@ $(function() {
       $('.optionsView').css('width', calculateWidth(0.8));
       $('.mainView').css('left', calculateWidth(0.8));
     }
-    // Adjusting the details width based on the main view width if dtails are being displayed
+    // Adjusting the details width based on the main view width if details are being displayed
     if($('.detailsView').css('right') === '0px') {
       $('.detailsView').css('width', calculateWidth(0.95));
     }

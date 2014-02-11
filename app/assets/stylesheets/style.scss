@@ -40,6 +40,7 @@ body {
   font: normal 14px/14px 'arsenalregular', Helvetica, sans-serif;
   color: $textColor;
   letter-spacing: 2px;
+  // overflow: hidden;
 }
 
 .overlay {
@@ -102,9 +103,12 @@ body {
   }
 
   input {
-    padding: 10px;
-    font-size: 16px;
-    line-height: 20px;
+    padding: 5px 10px;
+    font-size: 18px;
+    line-height: 23px;
+    border-radius: 8px;
+    color: $textColor;
+    background: -webkit-radial-gradient(center, cover ellipse, #ffffff 0%, #ffffff 60%, #dedede 100%);
   }
 }
 
@@ -335,9 +339,9 @@ body {
 .detailsView {
   position: absolute;
   width: 0px;
-  right: 0px;
+  right: -1px;
   top: 0px;
-  background: #5f2f90;
+  background: $pattern;
   box-shadow: 1px 0 3px black;
   z-index: 15;
   color: white;
@@ -371,7 +375,8 @@ body {
 
         .fa-pencil-square-o {
           text-align: right;
-          color: #5DD2EA;
+          color: white;
+          text-shadow: 1px 1px 1px #a788c4;
           padding: 0px;
           font-size: 40px;
           line-height: 50px;
@@ -437,10 +442,43 @@ body {
           margin-top: 10px;
         }
 
+        .changeNotes {
+          @extend .changeKeywords;
+        }
+
         textarea {
           @extend input;
+          height: 140px;
           resize: none;
         }
+
+        .dueDateButton {
+          @extend .changeKeywords;
+        }
+
+        .currentDueDate {
+          @extend .changeKeywords;
+
+          p {
+            text-align: left;
+            padding: 0px;
+            font-size: 16px;
+            margin-top: 5px;
+          }
+
+          .fa-pencil-square-o {
+            font-size: 25px;
+            line-height: 25px;
+          }
+        }
+
+        .changeDueDate {
+            overflow: hidden;
+            height: 0;
+            min-height: 0;
+            -webkit-transition: all 0.3s ease-in;
+            margin-top: 10px;
+          }
 
         .datetime {
           padding: 0px;
@@ -539,10 +577,6 @@ body {
 /*********************/
 
 @media screen and (max-width: 768px) {
-  // .container {
-  //   background: white;
-  // }
-
   .mainTitle h1 {
     text-align: center;
   }

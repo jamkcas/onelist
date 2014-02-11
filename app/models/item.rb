@@ -38,6 +38,8 @@ class Item < ActiveRecord::Base
       newItem[:keywords] = keywords
       newItem[:title] = item.title
       newItem[:complete] = item.complete
+      newItem[:notes] = item.note
+      newItem[:due_date] = item.due_date
       newItem[:updated_at] = item.updated_at
       newItem[:created_at] = item.created_at
       itemsHash.push(newItem)
@@ -61,6 +63,8 @@ class Item < ActiveRecord::Base
 
   def self.changeItem(params, current_user)
     Item.find(params[:data][:id]).update_attributes(title: params[:data][:title]) if params[:data][:title]
+    Item.find(params[:data][:id]).update_attributes(note: params[:data][:note]) if params[:data][:note]
+    Item.find(params[:data][:id]).update_attributes(due_date: params[:data][:due_date]) if params[:data][:due_date]
 
     if params[:data][:keywords]
       id = current_user.item_users.where(item_id: params[:data][:id])[0].id

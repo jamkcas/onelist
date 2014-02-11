@@ -59,17 +59,6 @@ angular.module('oneListApp').directive('showDetails', function() {
   }
 });
 
-angular.module('oneListApp').directive('back', function() {
-  return function(scope, element, attrs) {
-    element.bind('click', function() {
-      // Hiding the overlay
-      toggleOverlay();
-      // Hiding the details view
-      hideDetails();
-    });
-  }
-});
-
 angular.module('oneListApp').directive('hide', function() {
   return function(scope, element, attrs) {
     // Hiding the options or details view and displaying the main view when the overlay is clicked
@@ -84,21 +73,21 @@ angular.module('oneListApp').directive('hide', function() {
       }
       // If details view is currently displayed, then the details view is hidden
       if($('.detailsView').css('right') === '0px') {
-        hideDetails();
+        var width = calculateWidth(0.95);
+        $('.detailsView').animate({ 'right': -(width + 5) }, {'complete': function() {
+            $('.changeTitle').css('height', '0px');
+            $('.editTitle').fadeIn(200);
+            $('.changeDueDate').css('height', '0px');
+            $('.editDueDate').fadeIn(200);
+            revertBackground();
+          }
+        });
       }
+      // Invoking the clear scope function to clear the current item attribute on the current scope
+      setTimeout(function() {
+        scope.$apply(attrs.hide);
+      }, 300);
     });
-  }
-});
-
-angular.module('oneListApp').directive('title', function() {
-  return function(scope,element, attrs) {
-    var populateField = function() {
-      var val = attrs.placeholder;
-      element.val(val);
-    };
-    // When the title input is clicked or focused on, the input field is filled with current title and the cursor goes to the end
-    element.bind('focus', populateField);
-    element.bind('click', populateField);
   }
 });
 
@@ -125,6 +114,18 @@ angular.module('oneListApp').directive('doneTitle', function() {
         $('.editTitle').fadeIn(200);
       }, 300);
     });
+  }
+});
+
+angular.module('oneListApp').directive('editNotes', function() {
+  return function(scope, element, attrs) {
+    var invertBackground = function() {
+      element.css('background', '-webkit-radial-gradient(center, cover ellipse, #333333 0%, #333333 60%, #272822 100%)');
+      element.css('color', 'white');
+    };
+
+    element.bind('click', invertBackground);
+    element.bind('focus', invertBackground);
   }
 });
 
@@ -164,6 +165,32 @@ angular.module('oneListApp').directive('hideKeyword', function ($animate) {
         // After 4/10 of a second, the delete keyword function is invoked to delete the current keyword
         scope.$apply(attrs.hideKeyword);
       }, 400);
+    });
+  }
+});
+
+angular.module('oneListApp').directive('editDuedate', function() {
+  return function(scope, element, attrs) {
+    // When the edit due_date button is clicked, the edit due_date button is hidden and the change due_date input is displayed
+    element.bind('click', function() {
+      $('.changeDueDate').css('height', '90px');
+      $(this).fadeOut(200);
+    });
+  }
+});
+
+angular.module('oneListApp').directive('doneDuedate', function() {
+  return function(scope, element, attrs) {
+    // When the done due_date button is clicked, the due_date is updated, the edit due_date button is displayed, and the change due_date input is hidden
+    element.bind('click', function() {
+      // The addDueDate function is invoked to update the due_date, and update the due_date on the current scope
+      scope.$apply(attrs.doneDuedate);
+
+      // Hiding the change title input amd showing the edit title button
+      $('.changeDueDate').css('height', '0px');
+      setTimeout(function() {
+        $('.editDueDate').fadeIn(200);
+      }, 300);
     });
   }
 });
