@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require underscore.min
 //= require_directory ./assets
 //= require list
 //= require_directory ./controllers

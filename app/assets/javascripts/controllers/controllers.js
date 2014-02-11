@@ -26,6 +26,8 @@ angular.module('oneListApp').controller('completeController', function($scope, i
     itemsFactory.removeItem(data).success(function(data) {});
     // Removing current item from the items list
     $scope.items.splice(i, 1);
+    // Updating the keyword list if an item is marked as incomplete
+    $scope.createKeywordList();
   };
 
   $scope.getItem = function(i) {
@@ -40,11 +42,28 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   };
 
   $scope.doneSearching = function() {
-    // Restting the searchTerm when done searching
+    // Resetting the search term values when done searching or filtering
     if(this.searchTerm) {
-      this.searchTerm.title = '';
-      this.searchTerm.keywords = '';
+      this.searchTerm = '';
     }
+    // Resetting the search filter value when done filtering
+    if(this.searchFilter) {
+      this.searchFilter = '';
+    }
+  };
+
+  $scope.setFilter = function() {
+    // Setting the keyword search filter value to the selected keyword
+    this.searchTerm.keywords = this.keyword;
+  };
+
+  $scope.createKeywordList = function() {
+    // Creating a keyword list for filtering purposes
+    var keywordList = [];
+    for(var i = 0; i < $scope.items.length; i++) {
+      keywordList.push($scope.items[i].keywords);
+    }
+    $scope.keywordList = _.uniq(_.flatten(keywordList)).sort();
   };
 });
 
@@ -96,6 +115,8 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     itemsFactory.removeItem(data).success(function(data) {});
     // Removing current item from the items list
     $scope.items.splice(i, 1);
+    // Updating the keyword list if an item is marked as completed
+    $scope.createKeywordList();
   };
 
   $scope.getItem = function(i) {
@@ -150,8 +171,10 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
         $scope.items[$scope.index].keywords = data[0];
         $scope.items[$scope.index].keywordIds = data[1];
       }
+      // Updating keyword list if a keyword is added
+      $scope.createKeywordList();
     });
-  }
+  };
 
   $scope.deleteKeyword = function(i) {
     // Grabbing the current keywords and ids for this item
@@ -162,6 +185,8 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
       // Removing the keyword and id from the item keywords in current scope
       keywords.splice(i, 1);
       keywordIds.splice(i, 1);
+      // Updating keyword list if a keyword is deleted
+      $scope.createKeywordList();
     });
   };
 
@@ -198,11 +223,28 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   };
 
   $scope.doneSearching = function() {
-    // Resetting the searchTerm when done searching
+    // Resetting the search term values when done searching or filtering
     if(this.searchTerm) {
-      this.searchTerm.title = '';
-      this.searchTerm.keywords = '';
+      this.searchTerm = '';
     }
+    // Resetting the search filter value when done filtering
+    if(this.searchFilter) {
+      this.searchFilter = '';
+    }
+  };
+
+  $scope.setFilter = function() {
+    // Setting the keyword search filter value to the selected keyword
+    this.searchTerm.keywords = this.keyword;
+  };
+
+  $scope.createKeywordList = function() {
+    // Creating a keyword list for filtering purposes
+    var keywordList = [];
+    for(var i = 0; i < $scope.items.length; i++) {
+      keywordList.push($scope.items[i].keywords);
+    }
+    $scope.keywordList = _.uniq(_.flatten(keywordList)).sort();
   };
 });
 

@@ -244,6 +244,8 @@ angular.module('oneListApp').directive('filterLabels', function() {
   return function(scope, element, attrs) {
     // When filter label button is clicked the filter label input is displayed and the add item input is hidden
     element.bind('click', function() {
+      // Invoking the createKeyword List to create a list of searchable keywords for filtering
+      scope.$apply(attrs.filterLabels);
       // Displaying the search overlay to prevent searchFilter buttons from being clicked
       $('.searchOverlay').css('height', $('.searchFilters').height());
       $('.searchOverlay').css('z-index', '200');
@@ -270,6 +272,8 @@ angular.module('oneListApp').directive('doneFiltering', function() {
     // When x button is clicked the add item input is displayed and the filter label input is hidden
     element.bind('click', function() {
       $('.searchOverlay').css('z-index', '-100');
+      $('.filterTagList').css('opacity', '0');
+      $('.filterWindow').css('overflow', 'hidden');
       // Hiding the filter label input and displaying the add item input
       $('.filterWindow').animate({ 'height': '0px' }, { 'complete': function() {
           $('.filterWindow').css({ 'border-bottom': '0px' });
@@ -281,6 +285,42 @@ angular.module('oneListApp').directive('doneFiltering', function() {
       });
       // Displaying the search items title text
       $('.searchItems p').css('opacity', '1');
+    });
+  }
+});
+
+angular.module('oneListApp').directive('searchFilter', function() {
+  return function(scope, element, attrs) {
+    element.bind('keyup', function() {
+      // If their is an input value then the filtered keyword list display is shown
+      if(element.val() !== '') {
+        $('.filterWindow').css('overflow', 'visible');
+        $('.filterTagList').css('opacity', '1');
+        // Removing the text shadow if there is nothing in the filtered keyword list
+        if($('.filterTagList').children().length === 0) {
+          $('.filterTagList').css('box-shadow', 'none');
+        } else {
+          $('.filterTagList').css('box-shadow', '0.5px 1px 1px #878787');
+        }
+      // If there is no input value then the filtered keyword list display is hidden
+      } else {
+        $('.filterTagList').css('opacity', '0');
+        $('.filterWindow').css('overflow', 'hidden');
+      }
+    });
+  }
+});
+
+angular.module('oneListApp').directive('setFilter', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      // If a keyword is selected the search field input is set to it
+      $('.searchField').val(scope.this.keyword);
+      // Invoking the set filter function to filter the list by the selected keyword
+      scope.$apply(attrs.setFilter);
+      // Hiding the filtered keyword list display
+      $('.filterTagList').css('opacity', '0');
+      $('.filterWindow').css('overflow', 'hidden');
     });
   }
 });

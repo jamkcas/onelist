@@ -379,9 +379,28 @@ body {
 
       .filterWindow {
         @extend .searchWindow;
+        z-index: 5;
 
         input {
           padding-left: 10px;
+        }
+
+        .filterTagList {
+          padding: 0px;
+          box-shadow: 0.5px 1px 1px #878787;
+          margin-top: -19px;
+          margin-left: 7px;
+          overflow: hidden;
+          opacity: 0;
+
+          li {
+            background: $listBG;
+            padding: 10px;
+          }
+
+          li:last-child {
+            border-bottom: none;
+          }
         }
       }
 
