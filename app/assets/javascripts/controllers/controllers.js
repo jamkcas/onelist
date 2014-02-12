@@ -10,8 +10,10 @@ angular.module('oneListApp').controller('completeController', function($scope, i
     $scope.nextPageTitle = 'Show To Do List';
     // Setting index for use when updating items
     $scope.index = 0;
-
+    // Setting complete attribute to display list items as completed
     $scope.complete = true;
+    // Setting the initial view to list view
+    $scope.view = 'list';
   };
 
   init();
@@ -65,6 +67,11 @@ angular.module('oneListApp').controller('completeController', function($scope, i
     }
     $scope.keywordList = _.uniq(_.flatten(keywordList)).sort();
   };
+
+  $scope.changeView = function(view) {
+    // Changing view to selected view
+    $scope.view = view;
+  };
 });
 
 
@@ -85,6 +92,8 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     $scope.complete = false;
     $scope.notes = false;
     $scope.due_date = false;
+    // Setting the inital view to the list view
+    $scope.view = 'list';
   };
 
   init();
@@ -245,6 +254,11 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
       keywordList.push($scope.items[i].keywords);
     }
     $scope.keywordList = _.uniq(_.flatten(keywordList)).sort();
+  };
+
+  $scope.changeView = function(view) {
+    // Changing view to selected view
+    $scope.view = view;
   };
 });
 

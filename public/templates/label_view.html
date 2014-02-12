@@ -1,0 +1,11 @@
+<header class='labelHeader col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+  <h1 class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>Labels</h1>
+  <p class='labels col-lg-1 col-md-1 col-sm-1 col-xs-1' backto-list='changeView("list")'>x</p>
+</header>
+
+<div class='labelList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+  <h3>Click a label to delete all items with that label</h3>
+  <ul>
+    <li data-ng-repeat='label in labels'>{{ label }}</li>
+  </ul>
+</div>

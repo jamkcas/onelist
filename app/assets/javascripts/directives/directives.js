@@ -1,3 +1,42 @@
+/***************************/
+/*** Directive Functions ***/
+/***************************/
+
+var showMain = function() {
+  // If main view isnt currently displayed, then the main view is displayed and the options view is hidden
+  if($('mainView').css('left') != '0px') {
+    var width = calculateWidth(0.8);
+    $('.mainView').animate({ 'left': '0' });
+    $('.optionsView').animate({ 'left': -width });
+  }
+  // If details view is currently displayed, then the details view is hidden
+  if($('.detailsView').css('right') === '0px') {
+    var width = calculateWidth(0.95);
+    $('.detailsView').animate({ 'right': -(width + 5) }, {'complete': function() {
+        $('.changeTitle').css('height', '0px');
+        $('.editTitle').fadeIn(200);
+        $('.changeDueDate').css('height', '0px');
+        $('.editDueDate').fadeIn(200);
+        revertBackground();
+      }
+    });
+  }
+};
+
+var toggleOverlay = function() {
+  $('.overlay').toggleClass('invisible');
+};
+
+var revertBackground = function() {
+  $('.notes').css('background', '-webkit-radial-gradient(center, cover ellipse, #ffffff 0%, #ffffff 60%, #dedede 100%)');
+  $('.notes').css('color', '#878787');
+};
+
+
+/******************/
+/*** Directives ***/
+/******************/
+
 angular.module('oneListApp').directive('removeItem', function() {
   return function(scope, element, attrs) {
     // When remove item is clicked the list item animates off the page, collapses then is removed from the scope
@@ -65,24 +104,7 @@ angular.module('oneListApp').directive('hide', function() {
     element.bind('click', function() {
       // Hiding the overlay
       toggleOverlay();
-      // If main view isnt currently displayed, then the main view is displayed and the options view is hidden
-      if($('mainView').css('left') != '0px') {
-        var width = calculateWidth(0.8);
-        $('.mainView').animate({ 'left': '0' });
-        $('.optionsView').animate({ 'left': -width });
-      }
-      // If details view is currently displayed, then the details view is hidden
-      if($('.detailsView').css('right') === '0px') {
-        var width = calculateWidth(0.95);
-        $('.detailsView').animate({ 'right': -(width + 5) }, {'complete': function() {
-            $('.changeTitle').css('height', '0px');
-            $('.editTitle').fadeIn(200);
-            $('.changeDueDate').css('height', '0px');
-            $('.editDueDate').fadeIn(200);
-            revertBackground();
-          }
-        });
-      }
+      showMain();
       // Invoking the clear scope function to clear the current item attribute on the current scope
       setTimeout(function() {
         scope.$apply(attrs.hide);
@@ -321,6 +343,38 @@ angular.module('oneListApp').directive('setFilter', function() {
       // Hiding the filtered keyword list display
       $('.filterTagList').css('opacity', '0');
       $('.filterWindow').css('overflow', 'hidden');
+    });
+  }
+});
+
+angular.module('oneListApp').directive('changeView', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      // Showing the main view
+      showMain();
+      // Setting the new current view element
+      var elem = element.hasClass('labels') ? $('.labelView') : $('.accountView');
+      // Fading out list view and displaying new current view
+      $('.listView').fadeOut(200, function() {
+        // Invoking changeView function on current scope to display new current view
+        scope.$apply(attrs.changeView);
+        elem.fadeIn(200);
+      });
+    });
+  }
+});
+
+angular.module('oneListApp').directive('backtoList', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      // Setting the current view element
+      var elem = element.hasClass('labels') ? $('.labelView') : $('.accountView');
+      // Fading out current view and displaying list view
+      elem.fadeOut(200, function() {
+        // Invoking changeView function on current scope to display current view
+        scope.$apply(attrs.backtoList);
+        $('.listView').fadeIn(200);
+      });
     });
   }
 });

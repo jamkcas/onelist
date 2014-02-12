@@ -23,6 +23,7 @@ class Item < ActiveRecord::Base
 
   def self.createHash(current_user, items)
     itemsHash = []
+    # Creating new item objects to include keywords and keyword ids
     items.each do |item|
       newItem = {}
       id = current_user.item_users.where(item_id: item.id)[0]
