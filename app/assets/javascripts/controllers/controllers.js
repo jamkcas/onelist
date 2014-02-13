@@ -365,6 +365,7 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.getLabels = function() {
     var labels = [];
+    // Getting all the keywords and making a sorted and unique label list
     _.each($scope.items, function(item) {
       labels = _.union(labels, item.keywords);
     });
@@ -373,17 +374,14 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.deleteLabel = function(i) {
     var data = this.label;
-
+    // Making a delete request to delete entered label items
     itemsFactory.deleteLabel(data).success(function(data) {
       var data = 'This is an ajax request';
-      // Fetching all the current user info and lists
+      // Fetching the new current item list
       itemsFactory.getIncompleteItems(data).success(function(data) {
-        // Setting the current item list
+        // Setting the new current item list
         $scope.items = data.items;
-        // Setting the current user name
-        $scope.username = data.username;
-        // Setting the current user email
-        $scope.email = data.email;
+        // Setting the labels with updated list
         $scope.labels = $scope.getLabels();
       });
     });

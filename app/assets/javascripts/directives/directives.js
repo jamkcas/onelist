@@ -353,6 +353,7 @@ angular.module('oneListApp').directive('checkInput', function() {
 angular.module('oneListApp').directive('showConfirmation', function() {
   return function(scope, element, attrs) {
     element.bind('click', function() {
+      // Hiding the trash icon button and showing the confirmation window
       $(this).animate({ 'opacity': '0' }, {'complete': function() {
           $(this).css('display', 'none');
           $(this).prev().css('display', 'block');
@@ -366,6 +367,7 @@ angular.module('oneListApp').directive('showConfirmation', function() {
 angular.module('oneListApp').directive('hideConfirmation', function() {
   return function(scope, element, attrs) {
     element.bind('click', function() {
+      // Hiding the confirmation window and showing the trash icon button
       $(this).parent().animate({ 'opacity': '0' }, {'complete': function() {
           $(this).css('display', 'none');
           $(this).next().css('display', 'block');
@@ -379,6 +381,7 @@ angular.module('oneListApp').directive('hideConfirmation', function() {
 angular.module('oneListApp').directive('showInput', function() {
   return function(scope, element, attrs) {
     element.bind('click', function() {
+      // Hiding the magnifying glass search button and displaying the search input field
       $(this).fadeOut(300, function() {
         $('.searchLabelInput').animate({ 'height': '57' });
       });
@@ -389,8 +392,10 @@ angular.module('oneListApp').directive('showInput', function() {
 angular.module('oneListApp').directive('hideInput', function() {
   return function(scope, element, attrs) {
     element.bind('click', function() {
+      // Hiding the search input field and showing the search magnifying glass button
       $('.searchLabelInput').animate({ 'height': '0' }, { 'complete': function() {
           $('.searchGlass').fadeIn();
+          // Invoking the deleteLabel function on the current scope
           scope.$apply(attrs.hideInput);
         }
       });
