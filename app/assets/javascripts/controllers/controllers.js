@@ -1,10 +1,18 @@
 angular.module('oneListApp').controller('completeController', function($scope, itemsFactory) {
   var init = function() {
-    // Setting the welcome message based on current user
-    $scope.message = 'Welcome, ' + gon.current_user;
-    // Fetching all the completed items
-    itemsFactory.getCompleteItems().success(function(data) {
-      $scope.items = data;
+    // Checking to make sure there is a current user
+    if(gon.current_user === '') {
+      window.location = '#/login'
+    }
+    var data = 'This is an ajax request';
+    // Fetching all the current user info and lists
+    itemsFactory.getCompleteItems(data).success(function(data) {
+      // Setting the current item list
+      $scope.items = data.items;
+      // Setting the current user name
+      $scope.username = data.username;
+      // Setting the current user email
+      $scope.email = data.email;
     });
     // Setting the label message for the switch page button in the options view
     $scope.nextPageTitle = 'Show To Do List';
@@ -20,7 +28,6 @@ angular.module('oneListApp').controller('completeController', function($scope, i
 
   $scope.removeItem = function(i) {
     var data = {
-      heading: 'ajax request',
       complete: false,
       item_id: $scope.items[i].id
     };
@@ -76,13 +83,21 @@ angular.module('oneListApp').controller('completeController', function($scope, i
 
 
 
-angular.module('oneListApp').controller('incompleteController', function($scope, itemsFactory, sharedAttributesFactory) {
+angular.module('oneListApp').controller('incompleteController', function($scope, itemsFactory, usersFactory) {
   var init = function() {
-    // Setting the welcome message based on current user
-    $scope.message = 'Welcome, ' + gon.current_user;
-    // Fetching all the completed items
-    itemsFactory.getIncompleteItems().success(function(data) {
-      $scope.items = data;
+    // Checking to make sure there is a current user
+    if(gon.current_user === '') {
+      window.location = '#/login'
+    }
+    var data = 'This is an ajax request';
+    // Fetching all the current user info and lists
+    itemsFactory.getIncompleteItems(data).success(function(data) {
+      // Setting the current item list
+      $scope.items = data.items;
+      // Setting the current user name
+      $scope.username = data.username;
+      // Setting the current user email
+      $scope.email = data.email;
     });
     // Setting the label message for the switch page button in the options view
     $scope.nextPageTitle = 'Show Completed';
@@ -116,7 +131,6 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.removeItem = function(i) {
     var data = {
-      heading: 'ajax request',
       complete: true,
       item_id: $scope.items[i].id
     };
@@ -144,7 +158,6 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.editTitle = function() {
     var data = {
-      header: 'ajax request',
       title: this.item.title,
       id: this.item.id
     };
@@ -162,7 +175,6 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.addKeywords = function() {
     var data = {
-      header: 'ajax request',
       keywords: this.newKeywords,
       id: this.item.id
     }
@@ -201,7 +213,6 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.addNotes = function() {
     var data = {
-      header: 'ajax request',
       note: this.item.notes,
       id: this.item.id
     }
@@ -260,11 +271,79 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     // Changing view to selected view
     $scope.view = view;
   };
+
+  $scope.editUser = function(info) {
+    // Initializing(or resetting) the error scope
+    $scope.errors = {};
+    // Creating a data object based on type of info provided
+    if(info === 'name') {
+      var data = { username: this.username };
+    } else if(info === 'email') {
+      // Checking the format of the entered email address
+      if(this.email.match(/.+\@[a-zA-z0-9]+\.[a-zA-Z]{2,3}$/) && !this.email.trim().match(/\s/)) {
+       var data = { email: this.email };
+      } else {
+        $scope.errors.emailError = 'Sorry, invalid email';
+      }
+    } else {
+      // Checking to make sure old password is at least 8 characters long
+      if(this.oldPassword === undefined || this.oldPassword.length < 8) {
+        $scope.errors.oldPWError = 'Sorry, old password is incorrect.';
+      }
+      // Checking validations on password
+      var response = checkPasswords(this.confirmPassword, this.newPassword, this.oldPassword);
+      if(response.errors) {
+        $scope.errors.passwordError = response.errors;
+      } else {
+        var data = response.data;
+      }
+    }
+
+    if(data) {
+      usersFactory.updateUser(data).success(function(data) {
+        // Clearing any error messages when an update button is submitted
+        $scope.errors = {};
+        // Posting error messages to the correct spot if any exist
+        if(data.errors) {
+          if(data.errors === 'email') {
+            $scope.errors.emailError = 'Sorry, email address already in use.';
+          } else if(data.errors === 'name') {
+            $scope.errors.nameError = 'Sorry, unable to process your request at this time.';
+          } else if(data.errors === 'oldPW') {
+            $scope.errors.oldPWError = 'Sorry, old password is incorrect.';
+          } else {
+            $scope.errors.passwordError = [];
+            $scope.errors.passwordError.push('Sorry, unable to process your request at this time.');
+          }
+        // If no errors, updating the current user info based on the update
+        } else {
+          if(data.username) { $scope.username = data.username };
+          if(data.email) { $scope.email = data.email };
+        }
+      });
+    }
+  };
+
+  $scope.setError = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // // Checking to make sure passwords match and length is at least 8 characters long, otherwise an error message is displayed
+    response = checkPasswords(this.confirmPassword, this.newPassword);
+    $scope.errors.passwordError = response.errors;
+  };
 });
 
 
 
 angular.module('oneListApp').controller('loginController', function($scope, loginFactory) {
+  $scope.init = function() {
+    $scope.newUser = false;
+  }
+
+  $scope.changePage = function() {
+    $scope.newUser = !$scope.newUser;
+  };
+
   $scope.login = function() {
     var data = {
       email: $scope.user.email,
@@ -280,7 +359,7 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
         postErrors(errors, data);
       } else {
         // Setting the current user for welcome message
-        gon.current_user = data;
+        gon.current_user = data.notice;
         // Directing to the incomplete list view
         window.location = '#/incomplete';
       }
@@ -288,31 +367,57 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
   };
 
   $scope.signUp = function() {
-    var data = {
-      username: $scope.user.username,
-      email: $scope.user.email,
-      password: $scope.user.password,
-      password_confirmation: $scope.user.password_confirmation
-    };
-    // Making post request to create a new user and start a new user session
-    loginFactory.signUp(data).success(function(data) {
-      var errors = document.getElementById('signupErrors');
-      errors.innerHTML = '';
-      // Posting errors if any exist
-      if(data.errors.length > 0) {
-        for(var i = 0; i < data.errors.length; i++) {
-          postErrors(errors, data.errors[i]);
+    $scope.errors = [];
+    var response = checkPasswords($scope.user.password_confirmation, $scope.user.password);
+    if(response.errors) {
+      $scope.errors = response.errors;
+    } else {
+      var data = {
+        username: $scope.user.username,
+        email: $scope.user.email,
+        password: $scope.user.password,
+        password_confirmation: $scope.user.password_confirmation
+      };
+    }
+    console.log(data)
+    if(data) {
+      console.log('here')
+      // Making post request to create a new user and start a new user session
+      loginFactory.signUp(data).success(function(data) {
+        if(data.errors.length > 0) {
+          $scope.errors = data.errors;
+        } else {
+          // Setting the current user for welcome message
+          gon.current_user = data.notice;
+          // Directing to incomplete list view
+          window.location = '#/incomplete';
         }
-      } else {
-        // Setting the current user for welcome message
-        gon.current_user = data.notice;
-        // Directing to incomplete list view
-        window.location = '#/incomplete';
-      }
-    }).error(function(data) {
-      // Posting any request errors if they exist
-      var message = 'Sorry, we were unable to process your sign up request.';
-      postErrors(errors, errorMessage);
-    });
+      }).error(function(data) {
+        // Posting any request errors if they exist
+        $scope.errors = ['Sorry, we were unable to process your sign up request.'];
+      });
+    }
   };
 });
+
+var checkPasswords = function(confirmPW, newPW, oldPW) {
+  var response = {};
+  // Checking to make sure new password matches the confirmed password and is at least 8 characters long
+  if(!confirmPW || !newPW) {
+    response.errors = ["Passwords don't match.", 'Password must be 8 characters long.'];
+  } else if(confirmPW.length < 8 || newPW.length < 8) {
+    response.errors = ['Password must be 8 characters long.'];
+    if(confirmPW != newPW) {
+      response.errors.unshift("Passwords don't match.");
+    }
+  } else if(confirmPW != newPW) {
+    response.errors = ["Passwords don't match."];
+  } else {
+    if(oldPW) {
+      // Preparing password data if all conditions are met
+      response.data = { new_password: newPW, old_password: oldPW };
+      console.log('here')
+    }
+  }
+  return response;
+};

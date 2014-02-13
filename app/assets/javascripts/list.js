@@ -2,15 +2,6 @@
 /*** Utility Functions ***/
 /*************************/
 
-// Function for displaying errors
-var postErrors = function(elem, msg) {
-  var error = document.createElement('li');
-  error.className = 'col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12';
-  var errorMessage = document.createTextNode(msg);
-  error.appendChild(errorMessage);
-  elem.appendChild(error);
-};
-
 var defineLeft = function() {
   return (-(parseInt($('.container').css('margin-left').match(/[0-9]+/)[0]) + 300)).toString() + 'px';
 };
@@ -33,14 +24,7 @@ var calculateWidth = function(pct) {
   return $('.mainView').width() * pct;
 };
 
-var toggleOverlay = function() {
-  $('.overlay').toggleClass('invisible');
-};
 
-var revertBackground = function() {
-  $('.notes').css('background', '-webkit-radial-gradient(center, cover ellipse, #ffffff 0%, #ffffff 60%, #dedede 100%)');
-  $('.notes').css('color', '#878787');
-};
 
 /*************************/
 /*** Module and Config ***/
@@ -58,11 +42,6 @@ app.config(function($routeProvider) {
     {
       controller: 'incompleteController',
       templateUrl: 'templates/incomplete_list.html'
-    })
-    .when('/signup',
-    {
-      controller: 'loginController',
-      templateUrl: 'templates/signup.html'
     })
     .when('/login',
     {

@@ -3,6 +3,8 @@
 /***************************/
 
 var showMain = function() {
+  // Hiding the overlay
+  toggleOverlay();
   // If main view isnt currently displayed, then the main view is displayed and the options view is hidden
   if($('mainView').css('left') != '0px') {
     var width = calculateWidth(0.8);
@@ -102,8 +104,6 @@ angular.module('oneListApp').directive('hide', function() {
   return function(scope, element, attrs) {
     // Hiding the options or details view and displaying the main view when the overlay is clicked
     element.bind('click', function() {
-      // Hiding the overlay
-      toggleOverlay();
       showMain();
       // Invoking the clear scope function to clear the current item attribute on the current scope
       setTimeout(function() {
@@ -375,6 +375,14 @@ angular.module('oneListApp').directive('backtoList', function() {
         scope.$apply(attrs.backtoList);
         $('.listView').fadeIn(200);
       });
+    });
+  }
+});
+
+angular.module('oneListApp').directive('checkPassword', function() {
+  return function(scope, element, attrs) {
+    element.bind('keyup', function() {
+      scope.$apply(attrs.checkPassword);
     });
   }
 });

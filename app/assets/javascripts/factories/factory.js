@@ -1,12 +1,12 @@
 angular.module('oneListApp').factory('itemsFactory', function($http) {
   var factory = {};
 
-  factory.getIncompleteItems = function() {
-    return $http.get('/getIncomplete.json');
+  factory.getIncompleteItems = function(data) {
+    return $http.get('/getIncomplete/' + data + '.json');
   };
 
-  factory.getCompleteItems = function() {
-    return $http.get('/getComplete.json');
+  factory.getCompleteItems = function(data) {
+    return $http.get('/getComplete/' + data + '.json');
   };
 
   factory.saveItem = function(title) {
@@ -42,12 +42,13 @@ angular.module('oneListApp').factory('loginFactory', function($http) {
   return factory;
 });
 
-app.factory('sharedAttributesFactory', function() {
+angular.module('oneListApp').factory('usersFactory', function($http) {
   var factory = {};
 
-  factory.setMessage = function(msg) {
-    return factory.message = msg;
+  factory.updateUser = function(data) {
+    return $http.put('/updateUser', { data: data });
   };
 
   return factory;
 });
+

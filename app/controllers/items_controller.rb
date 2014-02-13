@@ -9,15 +9,15 @@ class ItemsController < ApplicationController
   end
 
   def getIncomplete
-    items = Item.fetchIncomplete(current_user) if current_user
+    response = (current_user && (params[:data] == 'This is an ajax request')) ? Item.fetchIncomplete(current_user) : 'Access Forbidden'
 
-    render json: items
+    render json: response
   end
 
   def getComplete
-    items = Item.fetchComplete(current_user) if current_user
+    response = (current_user && (params[:data] == 'This is an ajax request')) ? Item.fetchComplete(current_user) : 'Access Forbidden'
 
-    render json: items
+    render json: response
   end
 
   def saveItem

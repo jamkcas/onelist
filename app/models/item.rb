@@ -53,11 +53,23 @@ class Item < ActiveRecord::Base
   def self.fetchIncomplete(current_user)
     items = current_user.items.where(complete: false).reverse
     itemsHash = self.createHash(current_user, items)
+
+    response = {
+      items: itemsHash,
+      username: current_user.username.capitalize,
+      email: current_user.email,
+    }
   end
 
   def self.fetchComplete(current_user)
     items = current_user.items.where(complete: true).reverse
     itemsHash = self.createHash(current_user, items)
+
+    response = {
+      items: itemsHash,
+      username: current_user.username.capitalize,
+      email: current_user.email,
+    }
   end
 
   def self.switchStatus(params)

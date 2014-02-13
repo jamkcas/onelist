@@ -9,6 +9,8 @@ class SessionsController < ApplicationController
 
   def destroy
     cookies.delete(:auth_token)
+    gon.current_user = ''
+
     redirect_to '#/login'
   end
 end

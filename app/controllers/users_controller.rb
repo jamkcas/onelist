@@ -2,7 +2,6 @@ class UsersController < ApplicationController
   include SessionHelper
 
   def create
-    # response = User.saveUser(params, session, sign_in)
     # Creating a new user
     user = User.new(params[:user])
 
@@ -19,6 +18,12 @@ class UsersController < ApplicationController
 
     # If errors exist an error array is returned
     response[:errors] = user.errors.full_messages if user.errors
+
+    render json: response
+  end
+
+  def updateUser
+    response = User.update_user(params, current_user) if current_user
 
     render json: response
   end
