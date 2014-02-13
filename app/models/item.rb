@@ -88,4 +88,14 @@ class Item < ActiveRecord::Base
 
     response = params[:data][:keywords] ? keywords : 'Updated'
   end
+
+  def self.deleteItem(id)
+    Item.find(id).delete
+  end
+
+  def self.deleteItems(itemIds)
+    itemIds.each do |id|
+      Item.deleteItem(id)
+    end
+  end
 end

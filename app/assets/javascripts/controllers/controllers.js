@@ -242,6 +242,13 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     }
   };
 
+  $scope.deleteItem = function() {
+    var data = this.item.id;
+    itemsFactory.deleteItem(data).success(function() {
+      $scope.items.splice($scope.index, 1);
+    });
+  }
+
   $scope.doneSearching = function() {
     // Resetting the search term values when done searching or filtering
     if(this.searchTerm) {
@@ -268,8 +275,12 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   };
 
   $scope.changeView = function(view) {
+    $scope.labels = [];
     // Changing view to selected view
     $scope.view = view;
+    if(view === 'labels') {
+      $scope.labels = $scope.getLabels();
+    }
   };
 
   $scope.editUser = function(info) {
@@ -351,6 +362,36 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     var response = checkEmail(this.email);
     if(response.error) { $scope.errors.emailError = response.error; }
   };
+
+  $scope.getLabels = function() {
+    var labels = [];
+    _.each($scope.items, function(item) {
+      labels = _.union(labels, item.keywords);
+    });
+    return _.sortBy(labels);
+  };
+
+  $scope.deleteLabel = function(i) {
+    var data = this.label;
+
+    itemsFactory.deleteLabel(data).success(function(data) {
+      var data = 'This is an ajax request';
+      // Fetching all the current user info and lists
+      itemsFactory.getIncompleteItems(data).success(function(data) {
+        // Setting the current item list
+        $scope.items = data.items;
+        // Setting the current user name
+        $scope.username = data.username;
+        // Setting the current user email
+        $scope.email = data.email;
+        $scope.labels = $scope.getLabels();
+      });
+    });
+  };
+
+  $scope.clearLabelSearch = function() {
+    this.title = '';
+  }
 });
 
 

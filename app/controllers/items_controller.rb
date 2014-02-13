@@ -39,7 +39,20 @@ class ItemsController < ApplicationController
   end
 
   def deleteKeyword
-    Keyword.deleteKeyword(params) if current_user
+    Keyword.deleteKeyword(params[:id]) if current_user
+
+    render text: 'Deleted'
+  end
+
+  def deleteItem
+    Item.deleteItem(params[:id]) if current_user
+    ItemUser.deleteItem(params, current_user) if current_user
+
+    render text: 'Deleted'
+  end
+
+  def deleteLabel
+    ItemUser.deleteLabel(current_user, params)
 
     render text: 'Deleted'
   end

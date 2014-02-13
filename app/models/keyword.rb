@@ -20,7 +20,13 @@ class Keyword < ActiveRecord::Base
     keywords = [tag_names, tag_ids]
   end
 
-  def self.deleteKeyword(params)
-    Keyword.find(params[:id]).delete
+  def self.deleteKeyword(id)
+    Keyword.find(id).delete
+  end
+
+  def self.deleteKeywords(keywordIds)
+    keywordIds.each do |id|
+      Keyword.deleteKeyword(id)
+    end
   end
 end

@@ -3,9 +3,27 @@
   <p class='labels col-lg-1 col-md-1 col-sm-1 col-xs-1' backto-list='changeView("list")'>x</p>
 </header>
 
-<div class='labelList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-  <h3>Click a label to delete all items with that label</h3>
-  <ul>
-    <li data-ng-repeat='label in labels'>{{ label }}</li>
+<div class='labelsView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+  <header class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <h3 class='col-lg-10 col-md-10 col-sm-10 col-xs-10'>Click a label to delete all items with that label</h3>
+    <div class='searchLabels col-lg-2 col-md-2 col-sm-2 col-xs-2'>
+      <p class='searchGlass' show-input>z</p>
+    </div>
+  </header>
+  <div class='searchLabelInput col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <input type='text' placeholder='Enter a label' data-ng-model='title' class='col-lg-12 col-md-12 col-sm-12 col-xs-12'/>
+    <p hide-input='clearLabelSearch()'>x</p>
+  </div>
+  <ul class='labelsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <li data-ng-repeat='label in labels | filter:title' class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <header class='col-lg-5 col-md-5 col-sm-5 col-xs-5'>
+        <p>{{ label }}</p>
+      </header>
+
+      <div class='confirmation col-lg-7 col-md-7 col-sm-7 col-xs-7'>
+        <p class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>Confirm <span data-ng-click='deleteLabel()'>YES</span><span hide-confirmation>NO</span></p>
+        <p class='col-lg-12 col-md-12 col-sm-12 col-xs-12' show-confirmation><i class="fa fa-trash-o"></i></p>
+      </div>
+    </li>
   </ul>
 </div>

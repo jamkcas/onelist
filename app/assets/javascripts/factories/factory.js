@@ -21,8 +21,16 @@ angular.module('oneListApp').factory('itemsFactory', function($http) {
     return $http.put('/updateItem', { data: data });
   };
 
+  factory.deleteItem = function(data) {
+    return $http.delete('/deleteItem/' + data);
+  };
+
   factory.deleteKeyword = function(data) {
     return $http.delete('/deleteKeyword/' + data);
+  };
+
+  factory.deleteLabel = function(data) {
+    return $http.delete('/deleteLabel/' + data);
   };
 
   return factory;

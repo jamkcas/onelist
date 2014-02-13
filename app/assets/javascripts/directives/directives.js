@@ -350,6 +350,54 @@ angular.module('oneListApp').directive('checkInput', function() {
   }
 });
 
+angular.module('oneListApp').directive('showConfirmation', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      $(this).animate({ 'opacity': '0' }, {'complete': function() {
+          $(this).css('display', 'none');
+          $(this).prev().css('display', 'block');
+          $(this).prev().animate({ 'opacity': '1' });
+        }
+      });
+    });
+  }
+});
+
+angular.module('oneListApp').directive('hideConfirmation', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      $(this).parent().animate({ 'opacity': '0' }, {'complete': function() {
+          $(this).css('display', 'none');
+          $(this).next().css('display', 'block');
+          $(this).next().animate({ 'opacity': '1' });
+        }
+      });
+    });
+  }
+});
+
+angular.module('oneListApp').directive('showInput', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      $(this).fadeOut(300, function() {
+        $('.searchLabelInput').animate({ 'height': '57' });
+      });
+    });
+  }
+});
+
+angular.module('oneListApp').directive('hideInput', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      $('.searchLabelInput').animate({ 'height': '0' }, { 'complete': function() {
+          $('.searchGlass').fadeIn();
+          scope.$apply(attrs.hideInput);
+        }
+      });
+    });
+  }
+});
+
 
 /***************************/
 /*** Directive Functions ***/

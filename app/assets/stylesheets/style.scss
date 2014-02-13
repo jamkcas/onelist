@@ -536,6 +536,21 @@ body {
           @extend .changeKeywords;
         }
 
+        .deleteButton {
+          text-align: right;
+          margin-top: 30px;
+          padding: 0px;
+
+          p {
+            display: inline;
+            cursor: pointer;
+
+            .fa-trash-o {
+              font-size: 20px;
+            }
+          }
+        }
+
         .currentDueDate {
           @extend .changeKeywords;
 
@@ -672,10 +687,117 @@ body {
     }
   }
 
-  h3 {
-    font-size: 16px;
-    line-height: 20px;
-    color: white;
+  .labelsView {
+    padding: 0px;
+
+    header {
+      padding: 0px;
+
+      h3 {
+        margin-bottom: 20px;
+        font-size: 16px;
+        line-height: 20px;
+        color: white;
+        padding: 0px 20px;
+      }
+
+      .searchLabels {
+        text-align: right;
+        margin: 20px 0px;
+
+        p {
+          font: normal 30px/16px 'RaphaelIcons';
+          margin: 0px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    .searchLabelInput {
+      padding: 0px 20px;
+      position: relative;
+      height: 0px;
+      min-height: 0px;
+      overflow: hidden;
+
+      input {
+        padding: 5px 35px 5px 10px;
+        font-size: 18px;
+        line-height: 23px;
+        border-radius: 8px;
+        color: $textColor;
+        background: -webkit-radial-gradient(center, cover ellipse, #ffffff 0%, #ffffff 60%, #dedede 100%);
+      }
+
+      p {
+        font: normal 34px/41px'modern_pictogramsnormal';
+        position: absolute;
+        right: 25px;
+        top: 0px;
+        cursor: pointer;
+      }
+    }
+
+    .labelsList {
+      padding: 0px;
+      margin: 0px;
+
+      li {
+        padding: 20px;
+        margin: 0px;
+        list-style: none;
+        background: $listBG;
+        border-bottom: 1px solid black;
+
+        header {
+          padding: 0px;
+          margin: 0px;
+          overflow: hidden;
+
+          p {
+            padding: 0px;
+            margin: 0px;
+            font-size: 16px;
+            line-height: 20px;
+          }
+        }
+
+        .confirmation {
+          padding: 0px;
+          text-align: right;
+
+          p {
+            padding: 0px;
+            margin: 0px;
+            font-size: 16px;
+            line-height: 20px;
+
+            span {
+              background: #DEDEDF;
+              padding: 3px 6px;
+              border-radius: 5px;
+              margin-left: 10px;
+              cursor: pointer;
+            }
+
+            .fa-trash-o {
+              cursor: pointer;
+              font-size: 16px;
+              line-height: 20px;
+            }
+          }
+
+          p:first-child {
+            opacity: 0;
+            display: none;
+          }
+        }
+      }
+
+      li:first-child {
+        border-top: 1px solid black;
+      }
+    }
   }
 }
 
