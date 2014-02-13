@@ -124,6 +124,10 @@ body {
     color: white;
   }
 
+  .confirmPW {
+    margin-bottom: 0px;
+  }
+
   input {
     padding: 5px 10px;
     font-size: 18px;
@@ -169,7 +173,7 @@ body {
 #loginErrors {
   color: red;
   min-height: 0px;
-  margin-top: 10px;
+  // margin-top: 10px;
 
   li {
     list-style: none;
@@ -180,36 +184,6 @@ body {
     margin-bottom: 5px;
   }
 }
-
-/*******************/
-/*** Signup Page ***/
-/*******************/
-
-// .signupHeader {
-//   @extend .loginHeader;
-// }
-
-// .signupForm {
-//   @extend .loginForm;
-// }
-
-// .signupFormFields {
-//   @extend .loginFormFields;
-
-//   li:last-child {
-//     margin-top: 20px;
-//     color: #878787;
-//   }
-// }
-
-// .signupButtons {
-//   @extend .loginButtons;
-// }
-
-// #signupErrors {
-//   @extend #loginErrors;
-//   margin-bottom: 10px;
-// }
 
 /*****************/
 /*** Main Page ***/
@@ -719,6 +693,15 @@ body {
 
       .editErrors {
         color: red;
+
+        li {
+          padding-top: 10px;
+          padding-bottom: 0px;
+        }
+
+        p {
+          margin: 0px;
+        }
       }
 
       p {
@@ -748,8 +731,6 @@ body {
       }
     }
   }
-
-
 }
 
 

@@ -1,66 +1,73 @@
 <header class='labelHeader col-lg-12 col-md-12 col-sm-12 col-xs-12'>
   <h1 class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>Account Info</h1>
   <p class='account col-lg-1 col-md-1 col-sm-1 col-xs-1' backto-list='changeView("list")'>x</p>
-</header>
+</header> <!-- end labelHeader -->
 
 <ul class='accountInfo col-lg-12 col-md-12 col-sm-12 col-xs-12'>
   <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <p class='col-lg-2 col-md-2 col-sm-2 col-xs-2'>Username:</p>
     <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8'>
-      <input type='text' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-model='username'>
-    </div>
+      <input type='text' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-model='username' check-input='checkUsername()'>
+    </div> <!-- end div -->
+
     <div class='accountButton col-lg-2 col-md-2 col-sm-2 col-xs-2'>
       <button data-ng-click='editUser("name")'>Update</button>
-    </div>
+    </div> <!-- end accountButton -->
+
     <div class='editErrors col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2'>
       <p>{{ errors.nameError }}</p>
-    </div>
-  </li>
+    </div> <!-- end editErrors -->
+  </li> <!-- end accountInfo li -->
 
   <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <p class='col-lg-2 col-md-2 col-sm-2 col-xs-2'>Email:</p>
     <div class='col-lg-8 col-md-8 col-sm-8 col-xs-8'>
-      <input type='text' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-model='email'>
-    </div>
+      <input type='text' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-model='email' check-input='checkEmail()'>
+    </div> <!-- end div -->
+
     <div class='accountButton col-lg-2 col-md-2 col-sm-2 col-xs-2'>
       <button data-ng-click='editUser("email")'>Update</button>
-    </div>
+    </div> <!-- end accountButtons -->
+
     <div class='editErrors col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2'>
       <p>{{ errors.emailError }}</p>
-    </div>
-  </li>
+    </div> <!-- end edit Errors -->
+  </li> <!-- end accountInfo li -->
 
   <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <p class='col-lg-2 col-md-2 col-sm-2 col-xs-2'>Password:</p>
     <div class='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
       <input type='password' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Old Password' data-ng-model='oldPassword'>
-    </div>
+    </div> <!-- end div -->
+
     <div class='editErrors col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2'>
       <p>{{ errors.oldPWError }}</p>
-    </div>
-  </li>
+    </div> <!-- end editErrors -->
+  </li><!-- end accountInfo li -->
 
   <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <p class='col-lg-2 col-md-2 col-sm-2 col-xs-2'></p>
     <div class='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-      <input type='password' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='New Password' data-ng-model='newPassword' check-password='setError()'>
-    </div>
+      <input type='password' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='New Password' data-ng-model='newPassword' check-input='checkPassword()'>
+    </div> <!-- end div -->
+
     <ul class='editErrors col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2'>
       <li data-ng-repeat='error in errors.newPWError'>{{ error }}</li>
-    </ul>
-  </li>
+    </ul> <!-- end editErrors -->
+  </li> <!-- end accountInfo li -->
 
   <li class='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
     <p class='col-lg-2 col-md-2 col-sm-2 col-xs-2'></p>
     <div class='col-lg-6 col-md-6 col-sm-6 col-xs-6'>
-      <input type='password' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Confirm Password' data-ng-model='confirmPassword' check-password='setError()'>
-    </div>
+      <input type='password' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Confirm Password' data-ng-model='confirmPassword' check-input='checkPassword()'>
+    </div> <!-- end div -->
+
     <div class='accountButton col-lg-4 col-md-4 col-sm-4 col-xs-4'>
       <button data-ng-click='editUser("password")'>Update</button>
-    </div>
+    </div> <!-- end accoutnButton -->
+
     <ul class='editErrors col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2'>
       <li data-ng-repeat='error in errors.passwordError'>{{ error }}</li>
-    </ul>
-  </li>
-
-</ul>
+    </ul> <!-- end editErrors -->
+  </li><!-- end accountInfo li -->
+</ul> <!-- end accountInfo -->

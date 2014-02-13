@@ -277,13 +277,18 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     $scope.errors = {};
     // Creating a data object based on type of info provided
     if(info === 'name') {
-      var data = { username: this.username };
+      if(this.username.length < 1) {
+        $scope.errors.nameError = 'Sorry, field must be filled in';
+      } else {
+        var data = { username: this.username };
+      }
     } else if(info === 'email') {
       // Checking the format of the entered email address
-      if(this.email.match(/.+\@[a-zA-z0-9]+\.[a-zA-Z]{2,3}$/) && !this.email.trim().match(/\s/)) {
-       var data = { email: this.email };
+      var response = checkEmail(this.email);
+      if(response.error) {
+        $scope.errors.emailError = response.error;
       } else {
-        $scope.errors.emailError = 'Sorry, invalid email';
+        var data = response.data;
       }
     } else {
       // Checking to make sure old password is at least 8 characters long
@@ -324,12 +329,27 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
     }
   };
 
-  $scope.setError = function() {
+  $scope.checkPassword = function() {
     // Clearing error messages
     $scope.errors = {};
     // // Checking to make sure passwords match and length is at least 8 characters long, otherwise an error message is displayed
-    response = checkPasswords(this.confirmPassword, this.newPassword);
+    var response = checkPasswords(this.confirmPassword, this.newPassword);
     $scope.errors.passwordError = response.errors;
+  };
+
+  $scope.checkUsername = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // Checking to make sure a username was provided
+    if(this.username < 1) { $scope.errors.nameError = 'Sorry, you must enter a username.' }
+  };
+
+  $scope.checkEmail = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // Checking to make sure email is formatted correctly
+    var response = checkEmail(this.email);
+    if(response.error) { $scope.errors.emailError = response.error; }
   };
 });
 
@@ -338,39 +358,58 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 angular.module('oneListApp').controller('loginController', function($scope, loginFactory) {
   $scope.init = function() {
     $scope.newUser = false;
+    $scope.errors = [];
+    $scope.user = { email: '', username: '', password: '', password_confirmation: '' };
   }
+
+  $scope.init();
 
   $scope.changePage = function() {
     $scope.newUser = !$scope.newUser;
+    $scope.errors = [];
+    $scope.user = { email: '', username: '', password: '', password_confirmation: '' };
   };
 
   $scope.login = function() {
-    var data = {
-      email: $scope.user.email,
-      password: $scope.user.password,
-      remember: $scope.user.remember
-    }
-    // Making a post request to start a new user session
-    loginFactory.login(data).success(function(data) {
-      if(data === 'Invalid email or password.') {
-        // Displaying errors if they exist
-        var errors = document.getElementById('loginErrors');
-        errors.innerHTML = '';
-        postErrors(errors, data);
-      } else {
-        // Setting the current user for welcome message
-        gon.current_user = data.notice;
-        // Directing to the incomplete list view
-        window.location = '#/incomplete';
+    $scope.errors = [];
+    // Checking email format when logging in
+    var email = checkEmail($scope.user.email);
+    if(email.error) {
+      $scope.errors = ['Invalid email or password.'];
+    } else {
+      var data = {
+        email: $scope.user.email,
+        password: $scope.user.password,
+        remember: $scope.user.remember
       }
-    });
+    }
+    // If email format is correct then login request is made
+    if(data) {
+      // Making a post request to start a new user session
+      loginFactory.login(data).success(function(data) {
+        if(data === 'Invalid email or password.') {
+          $scope.errors = [data];
+        } else {
+          // Setting the current user for welcome message
+          gon.current_user = data.notice;
+          // Directing to the incomplete list view
+          window.location = '#/incomplete';
+        }
+      });
+    }
   };
 
   $scope.signUp = function() {
     $scope.errors = [];
-    var response = checkPasswords($scope.user.password_confirmation, $scope.user.password);
-    if(response.errors) {
-      $scope.errors = response.errors;
+    // Checking password, email, and username for proper formatting
+    var password = checkPasswords($scope.user.password_confirmation, $scope.user.password);
+    var email = checkEmail($scope.user.email);
+    if($scope.user.username.length < 1) { var username = 'Sorry, you must enter a username.' };
+    // Displaying errors if they exist
+    if(password.errors || email.error || username) {
+      var errors = _.flatten([username, email.error, password.errors]);
+      $scope.errors = errors;
+    // If no errors then user info is prepared for signup
     } else {
       var data = {
         username: $scope.user.username,
@@ -379,9 +418,9 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
         password_confirmation: $scope.user.password_confirmation
       };
     }
-    console.log(data)
+
+    // If no errors, a post request is made
     if(data) {
-      console.log('here')
       // Making post request to create a new user and start a new user session
       loginFactory.signUp(data).success(function(data) {
         if(data.errors.length > 0) {
@@ -398,7 +437,20 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
       });
     }
   };
+
+  $scope.checkEmail = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // Checking to make sure email is formatted correctly
+    var response = checkEmail(this.user.email);
+    if(response.error) { $scope.errors = [response.error]; }
+  };
 });
+
+
+/****************************/
+/*** Controller Functions ***/
+/****************************/
 
 var checkPasswords = function(confirmPW, newPW, oldPW) {
   var response = {};
@@ -416,8 +468,20 @@ var checkPasswords = function(confirmPW, newPW, oldPW) {
     if(oldPW) {
       // Preparing password data if all conditions are met
       response.data = { new_password: newPW, old_password: oldPW };
-      console.log('here')
     }
   }
   return response;
 };
+
+var checkEmail = function(email) {
+  // Checking the format of the entered email
+  var response = {};
+  if(email.match(/.+\@[a-zA-z0-9]+\.[a-zA-Z]{2,3}$/) && !email.trim().match(/\s/)) {
+    response.data = { email: email };
+  } else {
+    response.error = 'Sorry, invalid email.';
+  }
+
+  return response;
+};
+
