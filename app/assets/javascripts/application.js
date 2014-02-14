@@ -13,8 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
+//= require angular-animate
+//= require angular-route
 //= require underscore.min
-//= require_directory ./assets
 //= require list
 //= require_directory ./controllers
 //= require_directory ./directives

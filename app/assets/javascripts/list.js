@@ -30,7 +30,7 @@ var calculateWidth = function(pct) {
 /*** Module and Config ***/
 /*************************/
 
-var app = angular.module('oneListApp', []);
+var app = angular.module('oneListApp', ['ngRoute', 'ngAnimate']);
 
 app.config(function($routeProvider) {
   $routeProvider.when('/complete',
