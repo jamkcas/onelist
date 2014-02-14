@@ -8,8 +8,6 @@ class ItemsController < ApplicationController
   end
 
   def getIncomplete
-    p ('*') * 50
-    p 'here'
     response = (current_user && (params[:data] == 'This is an ajax request')) ? Item.fetchIncomplete(current_user) : 'Access Forbidden'
 
 

@@ -76,6 +76,19 @@ angular.module('oneListApp').directive('hide', function() {
   }
 });
 
+angular.module('oneListApp').directive('hideDetails', function() {
+  return function(scope, element, attrs) {
+    element.bind('swipeleft', function() {
+      event.stopImmediatePropagation();
+      showMain();
+      // Invoking the clear scope function to clear the current item attribute on the current scope
+      setTimeout(function() {
+        scope.$apply(attrs.hideDetails);
+      }, 300);
+    });
+  }
+});
+
 angular.module('oneListApp').directive('editTitle', function() {
   return function(scope, element, attrs) {
     // When the edit title button is clicked, the edit title button is hidden and the change title input is displayed
@@ -412,7 +425,7 @@ var showMain = function() {
   // Hiding the overlay
   toggleOverlay();
   // If main view isnt currently displayed, then the main view is displayed and the options view is hidden
-  if($('mainView').css('left') != '0px') {
+  if($('.optionsView').css('left') === '0px') {
     var width = calculateWidth(0.8);
     $('.mainView').animate({ 'left': '0' });
     $('.optionsView').animate({ 'left': -width });
