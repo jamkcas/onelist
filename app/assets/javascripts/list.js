@@ -72,8 +72,8 @@ $(function() {
   // if(gon.current_user === '') {
   //   window.location.replace('#/login');
   // }
-  // $.mobile.ignoreContentEnabled = true;
-  // $.mobile.defaultPageTransition = 'slide';
+  $.mobile.ignoreContentEnabled = true;
+  $.mobile.defaultPageTransition = 'slide';
   // Making sure the container covers at least the height of the window
   $('.container').css('min-height', $(window).height());
 
