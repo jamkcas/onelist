@@ -9,6 +9,6 @@
     <div class='accountView'  data-ng-include src="'templates/account_view.html'" data-ng-show='view === "account"'></div>
   </div> <!-- end mainView -->
 
-  <div class='detailsView' data-ng-include src="'templates/item_details.html'" data-ng-show='view === "list"'></div>
+  <div class='detailsView' data-ng-include src="'templates/item_details.html'" data-ng-show='view === "list"' hide-details='clearScope()'></div>
 </div> <!-- end main -->
 
