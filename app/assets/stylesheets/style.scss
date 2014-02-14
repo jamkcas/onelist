@@ -65,7 +65,7 @@ body {
   font: normal 14px/14px 'arsenalregular', Helvetica, sans-serif;
   color: $textColor;
   letter-spacing: 2px;
-  // overflow: hidden;
+  overflow-x: hidden;
 }
 
 .overlay {
@@ -256,7 +256,7 @@ body {
         height: 0px;
       }
 
-      .searchLabels, .searchItems {
+      .searchItems {
         padding: 20px;
         background: $radialBG;
         border-top: 1px solid black;
@@ -271,7 +271,12 @@ body {
         }
       }
 
+      .searchItems:hover {
+        background: -webkit-radial-gradient(center, ellipse cover, #8952c1 0%, #42166a 100%);
+      }
+
       .searchLabels {
+        @extend .searchItems;
         border-right: 1px solid black;
       }
     }

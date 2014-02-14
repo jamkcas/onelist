@@ -61,6 +61,12 @@ app.config(["$httpProvider", function($httpProvider) {
 /*** On Load ***/
 /***************/
 
+window.addEventListener("load",function() {
+ setTimeout(function(){
+    window.scrollTo(0, 0);
+    }, 0);
+});
+
 $(function() {
   // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
   if(gon.current_user === '') {

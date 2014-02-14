@@ -1,4 +1,4 @@
-angular.module('oneListApp').controller('completeController', function($scope, itemsFactory) {
+angular.module('oneListApp').controller('completeController', function($scope, itemsFactory, usersFactory) {
   var init = function() {
     // Checking to make sure there is a current user
     if(gon.current_user === '') {
@@ -76,8 +76,120 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   };
 
   $scope.changeView = function(view) {
+    $scope.labels = [];
     // Changing view to selected view
     $scope.view = view;
+    if(view === 'labels') {
+      $scope.labels = $scope.getLabels();
+    }
+  };
+
+  $scope.editUser = function(info) {
+    // Initializing(or resetting) the error scope
+    $scope.errors = {};
+    // Creating a data object based on type of info provided
+    if(info === 'name') {
+      if(this.username.length < 1) {
+        $scope.errors.nameError = 'Sorry, field must be filled in';
+      } else {
+        var data = { username: this.username };
+      }
+    } else if(info === 'email') {
+      // Checking the format of the entered email address
+      var response = checkEmail(this.email);
+      if(response.error) {
+        $scope.errors.emailError = response.error;
+      } else {
+        var data = response.data;
+      }
+    } else {
+      // Checking to make sure old password is at least 8 characters long
+      if(this.oldPassword === undefined || this.oldPassword.length < 8) {
+        $scope.errors.oldPWError = 'Sorry, old password is incorrect.';
+      }
+      // Checking validations on password
+      var response = checkPasswords(this.confirmPassword, this.newPassword, this.oldPassword);
+      if(response.errors) {
+        $scope.errors.passwordError = response.errors;
+      } else {
+        var data = response.data;
+      }
+    }
+
+    if(data) {
+      usersFactory.updateUser(data).success(function(data) {
+        // Clearing any error messages when an update button is submitted
+        $scope.errors = {};
+        // Posting error messages to the correct spot if any exist
+        if(data.errors) {
+          if(data.errors === 'email') {
+            $scope.errors.emailError = 'Sorry, email address already in use.';
+          } else if(data.errors === 'name') {
+            $scope.errors.nameError = 'Sorry, unable to process your request at this time.';
+          } else if(data.errors === 'oldPW') {
+            $scope.errors.oldPWError = 'Sorry, old password is incorrect.';
+          } else {
+            $scope.errors.passwordError = [];
+            $scope.errors.passwordError.push('Sorry, unable to process your request at this time.');
+          }
+        // If no errors, updating the current user info based on the update
+        } else {
+          if(data.username) { $scope.username = data.username };
+          if(data.email) { $scope.email = data.email };
+        }
+      });
+    }
+  };
+
+  $scope.checkPassword = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // // Checking to make sure passwords match and length is at least 8 characters long, otherwise an error message is displayed
+    var response = checkPasswords(this.confirmPassword, this.newPassword);
+    $scope.errors.passwordError = response.errors;
+  };
+
+  $scope.checkUsername = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // Checking to make sure a username was provided
+    if(this.username < 1) { $scope.errors.nameError = 'Sorry, you must enter a username.' }
+  };
+
+  $scope.checkEmail = function() {
+    // Clearing error messages
+    $scope.errors = {};
+    // Checking to make sure email is formatted correctly
+    var response = checkEmail(this.email);
+    if(response.error) { $scope.errors.emailError = response.error; }
+  };
+
+  $scope.getLabels = function() {
+    var labels = [];
+    // Getting all the keywords and making a sorted and unique label list
+    _.each($scope.items, function(item) {
+      labels = _.union(labels, item.keywords);
+    });
+    return _.sortBy(labels);
+  };
+
+  $scope.deleteLabel = function(i) {
+    var data = this.label;
+    // Making a delete request to delete entered label items
+    itemsFactory.deleteLabel(data).success(function(data) {
+      var data = 'This is an ajax request';
+      // Fetching the new current item list
+      itemsFactory.getCompleteItems(data).success(function(data) {
+        // Setting the new current item list
+        $scope.items = data.items;
+        // Setting the labels with updated list
+        $scope.labels = $scope.getLabels();
+      });
+    });
+  };
+
+  $scope.clearLabelSearch = function() {
+    this.title = '';
   };
 });
 
@@ -389,7 +501,7 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
 
   $scope.clearLabelSearch = function() {
     this.title = '';
-  }
+  };
 });
 
 
