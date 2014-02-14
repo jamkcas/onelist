@@ -1,5 +1,4 @@
 class ItemsController < ApplicationController
-  # before_filter :authorize, only: [:getItems]
 
   include SessionHelper
 
@@ -9,7 +8,10 @@ class ItemsController < ApplicationController
   end
 
   def getIncomplete
+    p ('*') * 50
+    p 'here'
     response = (current_user && (params[:data] == 'This is an ajax request')) ? Item.fetchIncomplete(current_user) : 'Access Forbidden'
+
 
     render json: response
   end

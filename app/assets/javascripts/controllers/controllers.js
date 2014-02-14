@@ -2,7 +2,7 @@ angular.module('oneListApp').controller('completeController', ['$scope', 'itemsF
   var init = function() {
     // Checking to make sure there is a current user
     if(gon.current_user === '') {
-      window.location = '#/login'
+      window.location = '#/login';
     }
     var data = 'This is an ajax request';
     // Fetching all the current user info and lists
@@ -199,7 +199,7 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
   var init = function() {
     // Checking to make sure there is a current user
     if(gon.current_user === '') {
-      window.location = '#/login'
+      window.location = '#/login';
     }
     var data = 'This is an ajax request';
     // Fetching all the current user info and lists

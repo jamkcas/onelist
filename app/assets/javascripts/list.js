@@ -48,7 +48,7 @@ app.config(function($routeProvider) {
       controller: 'loginController',
       templateUrl: 'templates/login.html'
     })
-    .otherwise({ redirectTo: '/login' });
+    .otherwise({ redirectTo: '/incomplete' });
 });
 
 // Configuration to deal with csrf-token
@@ -68,10 +68,10 @@ window.addEventListener("load",function() {
 });
 
 $(function() {
-  // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
-  if(gon.current_user === '') {
-    window.location.replace('#/login');
-  }
+  // // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
+  // if(gon.current_user === '') {
+  //   window.location.replace('#/login');
+  // }
 
   // Making sure the container covers at least the height of the window
   $('.container').css('min-height', $(window).height());
