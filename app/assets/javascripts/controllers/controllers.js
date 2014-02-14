@@ -403,7 +403,7 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
       if(this.username.length < 1) {
         $scope.errors.nameError = 'Sorry, field must be filled in';
       } else {
-        var data = { username: this.username };
+        var data = { username: this.username.toLowerCase() };
       }
     } else if(info === 'email') {
       // Checking the format of the entered email address
@@ -411,7 +411,7 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
       if(response.error) {
         $scope.errors.emailError = response.error;
       } else {
-        var data = response.data;
+        var data = response.data.toLowerCase();
       }
     } else {
       // Checking to make sure old password is at least 8 characters long
@@ -529,7 +529,7 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
       $scope.errors = ['Invalid email or password.'];
     } else {
       var data = {
-        email: $scope.user.email,
+        email: $scope.user.email.toLowerCase(),
         password: $scope.user.password,
         remember: $scope.user.remember
       }
@@ -563,8 +563,8 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
     // If no errors then user info is prepared for signup
     } else {
       var data = {
-        username: $scope.user.username,
-        email: $scope.user.email,
+        username: $scope.user.username.toLowerCase(),
+        email: $scope.user.email.toLowerCase(),
         password: $scope.user.password,
         password_confirmation: $scope.user.password_confirmation
       };
