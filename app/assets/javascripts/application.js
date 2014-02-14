@@ -12,7 +12,6 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery.mobile
 //= require angular
 //= require underscore.min
 //= require_directory ./assets
