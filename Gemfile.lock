@@ -132,6 +132,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  angularjs-rails
   angularjs-rails-cdn
   bcrypt-ruby (~> 3.0.0)
   coffee-rails (~> 3.2.1)
