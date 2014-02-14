@@ -1,4 +1,4 @@
-angular.module('oneListApp').controller('completeController', function($scope, itemsFactory, usersFactory) {
+angular.module('oneListApp').controller('completeController', ['$scope', 'itemsFactory', 'usersFactory', function($scope, itemsFactory, usersFactory) {
   var init = function() {
     // Checking to make sure there is a current user
     if(gon.current_user === '') {
@@ -191,11 +191,11 @@ angular.module('oneListApp').controller('completeController', function($scope, i
   $scope.clearLabelSearch = function() {
     this.title = '';
   };
-});
+}]);
 
 
 
-angular.module('oneListApp').controller('incompleteController', function($scope, itemsFactory, usersFactory) {
+angular.module('oneListApp').controller('incompleteController', ['$scope', 'itemsFactory', 'usersFactory', function($scope, itemsFactory, usersFactory) {
   var init = function() {
     // Checking to make sure there is a current user
     if(gon.current_user === '') {
@@ -502,11 +502,11 @@ angular.module('oneListApp').controller('incompleteController', function($scope,
   $scope.clearLabelSearch = function() {
     this.title = '';
   };
-});
+}]);
 
 
 
-angular.module('oneListApp').controller('loginController', function($scope, loginFactory) {
+angular.module('oneListApp').controller('loginController', ['$scope', 'loginFactory', function($scope, loginFactory) {
   $scope.init = function() {
     $scope.newUser = false;
     $scope.errors = [];
@@ -596,7 +596,7 @@ angular.module('oneListApp').controller('loginController', function($scope, logi
     var response = checkEmail(this.user.email);
     if(response.error) { $scope.errors = [response.error]; }
   };
-});
+}]);
 
 
 /****************************/
