@@ -78,8 +78,7 @@ angular.module('oneListApp').directive('hide', function() {
 
 angular.module('oneListApp').directive('hideDetails', function() {
   return function(scope, element, attrs) {
-    element.bind('swipeleft', function() {
-      event.stopImmediatePropagation();
+    element.bind('touchmove', function() {
       showMain();
       // Invoking the clear scope function to clear the current item attribute on the current scope
       setTimeout(function() {
