@@ -235,7 +235,7 @@ body {
     top: 0px;
     left: 0px;
     padding: 0px;
-    overflow: hidden;
+    overflow-x: hidden;
 
     .mainHeader {
       margin: 0px;
@@ -427,6 +427,7 @@ body {
   box-shadow: 1px 0 3px black;
   z-index: 15;
   color: white;
+  overflow-y: scroll;
 
   .closeDetails {
     margin: 20px;
