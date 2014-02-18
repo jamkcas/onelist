@@ -270,10 +270,6 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
 
   $scope.hideDetails = function() {
     showMain();
-      // Invoking the clear scope function to clear the current item attribute on the current scope
-      setTimeout(function() {
-        scope.$apply(attrs.hide);
-      }, 300);
   };
 
   $scope.editTitle = function() {

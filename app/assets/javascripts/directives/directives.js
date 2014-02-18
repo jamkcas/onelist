@@ -76,18 +76,6 @@ angular.module('oneListApp').directive('hide', function() {
   }
 });
 
-angular.module('oneListApp').directive('hideDetails', function() {
-  return function(scope, element, attrs) {
-    element.bind('touchmove', function() {
-      showMain();
-      // Invoking the clear scope function to clear the current item attribute on the current scope
-      setTimeout(function() {
-        scope.$apply(attrs.hideDetails);
-      }, 300);
-    });
-  }
-});
-
 angular.module('oneListApp').directive('editTitle', function() {
   return function(scope, element, attrs) {
     // When the edit title button is clicked, the edit title button is hidden and the change title input is displayed
