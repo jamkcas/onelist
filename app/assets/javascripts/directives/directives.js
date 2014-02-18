@@ -55,20 +55,9 @@ angular.module('oneListApp').directive('showDetails', function() {
       var width = calculateWidth(0.95);
       // Setting the height of the options window based on the greater of the heights between the main view and the window
       setHeight($('.detailsView'));
-      // console.log(scope)
-      // // Setting the date and time input to today
-      // var today = new Date();
-      // var day = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' + ("0" + today.getDate()).slice(-2);
-      // var time = ("0" + today.getHours()).slice(-2) + ':' + ("0" + today.getMinutes()).slice(-2);
-      // console.log(scope.item.due_date)
-      // if(scope.item.due_date) {
-      //   console.log()
-        $('.time input').val('');
-        $('.date input').val('');
-      // } else {
-      //   $('.time input').val(time);
-      //   $('.date input').val(day);
-      // }
+      // Setting the date and time input to zero
+      $('.time input').val('00:00');
+      $('.date input').val('0000-00-00');
       // Animating the details view
       $('.detailsView').css('right', -width);
       $('.detailsView').css('width', width);
