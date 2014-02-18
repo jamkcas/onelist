@@ -836,6 +836,7 @@ body {
       input {
         border: none;
         border-bottom: 1px solid white;
+        border-radius: none;
         background: none;
         font-size: 20px;
         line-height: 25px;
@@ -876,5 +877,15 @@ body {
 
   #loginDisplay {
     display: none;
+  }
+}
+
+@media screen and (max-width: 560px) {
+  .accountButton, .accountInput {
+    width: 100%;
+  }
+
+  .accountInfo li input {
+    padding: 5px;
   }
 }

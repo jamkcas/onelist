@@ -54,6 +54,7 @@ app.config(["$httpProvider", function($httpProvider) {
 /*** On Load ***/
 /***************/
 
+// For removing the address bar
 window.addEventListener("load",function() {
  setTimeout(function(){
     window.scrollTo(0, 0);
@@ -61,11 +62,6 @@ window.addEventListener("load",function() {
 });
 
 $(function() {
-  // // Redirects to login page if no one is logged in (mainly for when refreshing the page after signing in)
-  // if(gon.current_user === '') {
-  //   window.location.replace('#/login');
-  // }
-
   // Making sure the container covers at least the height of the window
   setHeight($('.container'));
 
