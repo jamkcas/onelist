@@ -8,11 +8,8 @@ var defineLeft = function() {
 
 // Function to set element height to either the mainView height or the window height depending which is bigger
 var setHeight = function(elem) {
-  if($(window).height() > $('.mainView').height()) {
+
     var height = $(window).height();
-  } else {
-    var height = $('.mainView').height();
-  }
   // Changing the height if the window or main view height is greater than the elements height
   if(height > elem.height()) {
     elem.css('height', height);
@@ -74,12 +71,12 @@ $(function() {
   // }
 
   // Making sure the container covers at least the height of the window
-  $('.container').css('min-height', $(window).height());
+  $('.container').css('height', $(window).height());
 
   // On resize,
   window.onresize = function() {
     // Making sure the container covers at least the height of the window
-    $('.container').css('min-height', $(window).height());
+    $('.container').css('height', $(window).height());
     // Setting the height of the options and details views when window is resized
     setHeight($('.optionsView'));
     setHeight($('.detailsView'));
