@@ -55,9 +55,6 @@ angular.module('oneListApp').directive('showDetails', function() {
       var width = calculateWidth(0.95);
       // Setting the height of the options window based on the greater of the heights between the main view and the window
       setHeight($('.detailsView'));
-      // Setting the date and time input to zero
-      $('.time input').val('00:00');
-      $('.date input').val('0000-00-00');
       // Animating the details view
       $('.detailsView').css('right', -width);
       $('.detailsView').css('width', width);
