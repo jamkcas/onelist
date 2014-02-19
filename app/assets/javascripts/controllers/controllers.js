@@ -341,17 +341,20 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
 
   $scope.addDatetime = function() {
     // Creating a new formatted datetime object with the inputted time and date
-    var time = new Date(this.item.date + ' ' + this.item.time).toLocaleString();
+    var dateString = new Date($('.date input').val() + ' ' + $('.time input').val()).toLocaleString();
     // Checking to see if a valid date is enetered
-    if(time.toString() !== 'Invalid Date') {
+    if(dateString !== 'Invalid Date') {
+      // Setting Date string to be saved
+      var date = $('.date input').val() + ' ' + formatTime($('.time input').val());
+      // Forming data object to be saved
       var data = {
-        due_date: time,
+        due_date: date,
         id: this.item.id
       };
       // Making a put request to save due date for current item
       itemsFactory.updateItem(data).success(function(data) {
         // Setting the current item's due date attribute on the current scope
-        $scope.items[$scope.index].due_date = time;
+        $scope.items[$scope.index].due_date = date;
         // Setting the due date scope to true for the current item
         $scope.due_date = true;
       });
@@ -449,8 +452,12 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
           }
         // If no errors, updating the current user info based on the update
         } else {
-          if(data.username) { $scope.username = data.username };
-          if(data.email) { $scope.email = data.email };
+          if(data.username) { $scope.username = data.username; }
+          if(data.email) { $scope.email = data.email; }
+          if(data === 'Updated') {
+            $scope.errors.passwordError = ['Password successfully updated!'];
+            $('.passwords').val('');
+          }
         }
       });
     }
@@ -513,7 +520,7 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
 angular.module('oneListApp').controller('loginController', ['$scope', 'loginFactory', function($scope, loginFactory) {
   $scope.init = function() {
     $scope.newUser = false;
-    $scope.errors = [];
+    $scope.errors = {};
     $scope.user = { email: '', username: '', password: '', password_confirmation: '' };
   }
 
@@ -521,16 +528,17 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
 
   $scope.changePage = function() {
     $scope.newUser = !$scope.newUser;
-    $scope.errors = [];
+    $scope.errors = {};
+    $('.field').removeClass('outline');
     $scope.user = { email: '', username: '', password: '', password_confirmation: '' };
   };
 
   $scope.login = function() {
-    $scope.errors = [];
+    $scope.errors.signInErrors = [];
     // Checking email format when logging in
     var email = checkEmail($scope.user.email);
     if(email.error) {
-      $scope.errors = ['Invalid email or password.'];
+      $scope.errors.signInErrors = ['Invalid email or password.'];
     } else {
       var data = {
         email: $scope.user.email.toLowerCase(),
@@ -543,7 +551,7 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
       // Making a post request to start a new user session
       loginFactory.login(data).success(function(data) {
         if(data === 'Invalid email or password.') {
-          $scope.errors = [data];
+          $scope.errors.signInErrors = [data];
         } else {
           // Setting the current user for welcome message
           gon.current_user = data.notice;
@@ -555,15 +563,28 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
   };
 
   $scope.signUp = function() {
-    $scope.errors = [];
+    $scope.errors = {};
+    $('.field').removeClass('outline');
     // Checking password, email, and username for proper formatting
     var password = checkPasswords($scope.user.password_confirmation, $scope.user.password);
     var email = checkEmail($scope.user.email);
-    if($scope.user.username.length < 1) { var username = 'Sorry, you must enter a username.' };
+    if($scope.user.username.length < 1) { var username = 'Mandatory Field' };
     // Displaying errors if they exist
     if(password.errors || email.error || username) {
-      var errors = _.flatten([username, email.error, password.errors]);
-      $scope.errors = errors;
+      if(username) {
+        $('.name_field').addClass('outline');
+        $scope.errors.nameError = username;
+      }
+      if(email.error) {
+        $('.email_field').addClass('outline');
+        $scope.errors.emailError = email.error;
+      }
+      if(password.errors) {
+        $('.password_field').addClass('outline');
+        $('.confirm_field').addClass('outline');
+        $scope.errors.passwordError = password.errors.join(', ');
+        $scope.errors.confirmError = password.errors.join(', ');
+      }
     // If no errors then user info is prepared for signup
     } else {
       var data = {
@@ -593,13 +614,77 @@ angular.module('oneListApp').controller('loginController', ['$scope', 'loginFact
     }
   };
 
-  $scope.checkEmail = function() {
+  $scope.checkEmail = function(check) {
     // Clearing error messages
-    $scope.errors = {};
+    $scope.errors.emailError = '';
+    $('.email_field').removeClass('outline');
     // Checking to make sure email is formatted correctly
-    var response = checkEmail(this.user.email);
-    if(response.error) { $scope.errors = [response.error]; }
+    if(check) {
+      var response = checkEmail(this.user.email);
+      if(response.error) {
+        $scope.errors.emailError = response.error;
+        $('.email_field').addClass('outline');
+      }
+    }
+    if(this.user.email === '') {
+      $('.email_field').addClass('outline');
+      $scope.errors.emailError = 'Mandatory Field';
+    }
   };
+
+  $scope.checkPassword = function(check) {
+    $scope.errors.passwordError = '';
+    $scope.errors.confirmError = '';
+    $('.password_field').removeClass('outline');
+    $('.confirm_field').removeClass('outline');
+    if(check) {
+      var response = checkPasswords(this.user.password, this.user.password_confirmation);
+      if(response.errors) {
+        $('.confirm_field').addClass('outline');
+        $('.password_field').addClass('outline');
+        $scope.errors.confirmError = response.errors.join(', ');
+        $scope.errors.passwordError = response.errors.join(', ');
+      }
+    } else {
+      if(this.user.password === '') {
+        $('.password_field').addClass('outline');
+        $scope.errors.passwordError = 'Mandatory Field';
+      }
+    }
+  };
+
+  $scope.checkConfirm = function(check) {
+    $scope.errors.confirmError = '';
+    $scope.errors.passwordError = '';
+    $('.confirm_field').removeClass('outline');
+    $('.password_field').removeClass('outline');
+    if(check) {
+      var response = checkPasswords(this.user.password, this.user.password_confirmation);
+      if(response.errors) {
+        $('.confirm_field').addClass('outline');
+        $('.password_field').addClass('outline');
+        $scope.errors.confirmError = response.errors.join(', ');
+        $scope.errors.passwordError = response.errors.join(', ');
+      }
+    } else {
+      if(this.user.password_confirmation === '') {
+        $('.confirm_field').addClass('outline');
+        $scope.errors.confirmError = 'Mandatory Field';
+      }
+    }
+  };
+
+  $scope.checkUsername = function() {
+    $scope.errors.nameError = '';
+    if(this.user.username === '') {
+      $('.name_field').addClass('outline');
+      $scope.errors.nameError = 'Mandatory Field';
+    } else {
+      $('.name_field').removeClass('outline');
+    }
+  };
+
+
 }]);
 
 
@@ -611,14 +696,14 @@ var checkPasswords = function(confirmPW, newPW, oldPW) {
   var response = {};
   // Checking to make sure new password matches the confirmed password and is at least 8 characters long
   if(!confirmPW || !newPW) {
-    response.errors = ["Passwords don't match.", 'Password must be 8 characters long.'];
+    response.errors = ["Passwords don't match", 'Password must be 8 characters long'];
   } else if(confirmPW.length < 8 || newPW.length < 8) {
-    response.errors = ['Password must be 8 characters long.'];
+    response.errors = ['Password must be 8 characters long'];
     if(confirmPW != newPW) {
-      response.errors.unshift("Passwords don't match.");
+      response.errors.unshift("Passwords don't match");
     }
   } else if(confirmPW != newPW) {
-    response.errors = ["Passwords don't match."];
+    response.errors = ["Passwords don't match"];
   } else {
     if(oldPW) {
       // Preparing password data if all conditions are met
@@ -631,10 +716,12 @@ var checkPasswords = function(confirmPW, newPW, oldPW) {
 var checkEmail = function(email) {
   // Checking the format of the entered email
   var response = {};
-  if(email.match(/.+\@[a-zA-z0-9]+\.[a-zA-Z]{2,3}$/) && !email.trim().match(/\s/)) {
+  if(email.length === 0) {
+    response.error = 'Mandatory Field';
+  } else if(email.match(/.+\@[a-zA-z0-9]+\.[a-zA-Z]{2,3}$/) && !email.trim().match(/\s/)) {
     response.data = { email: email };
   } else {
-    response.error = 'Sorry, invalid email.';
+    response.error = 'Not a valid email.';
   }
 
   return response;

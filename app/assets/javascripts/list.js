@@ -17,6 +17,42 @@ var calculateWidth = function(pct) {
   return $('.mainView').width() * pct;
 };
 
+// Getting and formatting current date
+var getCurrentDate = function() {
+  var today = new Date();
+  var date = {};
+  date.day = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' + ("0" + today.getDate()).slice(-2);
+  date.time = today.getHours() + ':' + ("0" + today.getMinutes()).slice(-2);
+  return date;
+};
+
+// Formatting military time to normal time
+var formatTime = function(time) {
+  var hours = time.slice(0, 2);
+  var minutes = time.slice(3);
+  if(hours > 12) {
+    hours -= 12;
+    var am_pm = 'PM';
+  } else {
+    var am_pm = 'AM'
+  }
+
+  var time = hours + ':' + minutes + am_pm;
+  return time;
+};
+
+// Formatting normal time to military time
+var toMilitary = function(time) {
+  if(time.slice(-2) === 'PM') {
+    var hours = parseInt(time.slice(0, 2)) + 12;
+    var mins = time.slice(-4).slice(0,2);
+    var date = hours + ':' + mins;
+  } else {
+    var date = time;
+  }
+  return date;
+};
+
 
 
 /*************************/

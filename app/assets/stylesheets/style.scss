@@ -78,6 +78,10 @@ body {
   z-index: 10;
 }
 
+.outline {
+  box-shadow: 0.5px 0.5px 5px 1px #ff6666;
+}
+
 /******************/
 /*** Login Page ***/
 /******************/
@@ -111,15 +115,21 @@ body {
   li {
     list-style: none;
     padding: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 
     label {
       margin-left: 3px;
     }
+
+    .err {
+      color: #fb3e3e;
+      margin-bottom: 0px;
+      margin-top: 5px;
+    }
   }
 
   li:last-child {
-    margin-top: -15px;
+    margin-top: -20px;
     margin-bottom: 0px;
     color: white;
   }

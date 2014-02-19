@@ -55,6 +55,16 @@ angular.module('oneListApp').directive('showDetails', function() {
       var width = calculateWidth(0.95);
       // Setting the height of the options window based on the greater of the heights between the main view and the window
       setHeight($('.detailsView'));
+      // Setting the date and time input to the due date if it exists, otherwise setting it to today's time
+      if(scope.item.due_date) {
+        var date = {};
+        date.day = scope.item.due_date.slice(0,10);
+        date.time = scope.item.due_date.slice(-7);
+      } else {
+        var date = getCurrentDate();
+      }
+      $('.time input').val(toMilitary(date.time));
+      $('.date input').val(date.day);
       // Animating the details view
       $('.detailsView').css('right', -width);
       $('.detailsView').css('width', width);
@@ -88,7 +98,7 @@ angular.module('oneListApp').directive('editTitle', function() {
 
 angular.module('oneListApp').directive('doneTitle', function() {
   return function(scope, element, attrs) {
-    // Whne the done title button is clicked, the title is updated, the edit title button is displayed, and the change title input is hidden
+    // When the done title button is clicked, the title is updated, the edit title button is displayed, and the change title input is hidden
     element.bind('click', function() {
       // The doneTitle function is invoked to update the title, and update the title on the current scope
       scope.$apply(attrs.doneTitle);
@@ -346,6 +356,16 @@ angular.module('oneListApp').directive('checkInput', function() {
   return function(scope, element, attrs) {
     element.bind('keyup', function() {
       scope.$apply(attrs.checkInput);
+    });
+  }
+});
+
+angular.module('oneListApp').directive('tabInput', function() {
+  return function(scope, element, attrs) {
+    element.bind('keydown', function(e) {
+      if(e.which === 9) {
+        scope.$apply(attrs.tabInput);
+      }
     });
   }
 });
