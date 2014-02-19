@@ -35,6 +35,7 @@ angular.module('oneListApp').directive('showOptions', function() {
       // Setting the height of the options window based on the greater of the heights between the main view and the window
       setHeight($('.optionsView'));
       // Animating options view
+      $('.optionsView').css('border-right', '1px solid black');
       $('.optionsView').css('left', -width);
       $('.optionsView').css('width', width);
       $('.mainView').animate({ 'left': width });
@@ -435,7 +436,10 @@ var showMain = function() {
   if($('.optionsView').css('left') === '0px') {
     var width = calculateWidth(0.8);
     $('.mainView').animate({ 'left': '0' });
-    $('.optionsView').animate({ 'left': -width });
+    $('.optionsView').animate({ 'left': -width }, {'complete': function() {
+        $('.optionsView').css('border-right', '0px');
+      }
+    });
   }
   // If details view is currently displayed, then the details view is hidden
   if($('.detailsView').css('right') === '0px') {

@@ -205,13 +205,13 @@ body {
   h1 {
     font-family: 'scratchregular';
     margin: 0px;
+    text-align: center;
   }
 }
 
 .options {
   font-size: 36px;
   padding: 20px 10px;
-  display: none;
   margin-left: 20px;
 
   .fa-bars {
@@ -221,19 +221,6 @@ body {
 
   .fa-bars:hover {
     color: #c289fc;
-  }
-}
-
-#loginDisplay {
-  text-align: right;
-  padding: 20px 10px;
-
-  li {
-    list-style: none;
-
-    p {
-      margin-bottom: 3px;
-    }
   }
 }
 
@@ -616,9 +603,8 @@ body {
 .optionsView {
   position: absolute;
   top: 0px;
-  left: -400px;
+  left: -401px;
   background: white;
-  display: none;
   border-right: 1px solid black;
   z-index: 15;
 
@@ -679,7 +665,8 @@ body {
 .labelView {
   .labelHeader {
     background: $radialBG;
-    border: 1px solid black;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
     color: white;
 
     h1 {
@@ -877,19 +864,19 @@ body {
 /*** Media Queries ***/
 /*********************/
 
-@media screen and (max-width: 768px) {
-  .mainTitle h1 {
-    text-align: center;
-  }
+// @media screen and (max-width: 768px) {
+  // .mainTitle h1 {
+  //   text-align: center;
+  // }
 
-  .options, .optionsView {
-    display: block;
-  }
+  // .options, .optionsView {
+  //   display: block;
+  // }
 
-  #loginDisplay {
-    display: none;
-  }
-}
+  // #loginDisplay {
+  //   display: none;
+  // }
+// }
 
 @media screen and (max-width: 560px) {
   .accountButton, .accountInput {
