@@ -2,6 +2,17 @@
 /*** Directives ***/
 /******************/
 
+angular.module('oneListApp').directive('addItem', function() {
+  return function(scope, element, attrs) {
+    element.bind('keyup', function(e) {
+      if(e.which === 13) {
+      console.log('here')
+      scope.$apply(attrs.addItem);
+    }
+    });
+  }
+});
+
 angular.module('oneListApp').directive('removeItem', function() {
   return function(scope, element, attrs) {
     // When remove item is clicked the list item animates off the page, collapses then is removed from the scope
