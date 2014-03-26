@@ -3,24 +3,26 @@
     <input type='text' data-ng-model='newItem' class='newItem  col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Add an item' add-item='addItem()' />
   </li> <!-- end addItem -->
 
-  <li class='searchWindow col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-    <input type='text' data-ng-model='searchTerm.title' class='col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Search for an item' />
-    <p class='search'>z</p>
-    <button done-searching='doneSearching()' class='doneSearching'><p>x</p></button>
-  </li> <!-- end searchWindow -->
-
-  <li class='filterWindow col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-    <input type='text' data-ng-model='searchTerm.keywords' class='searchField col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Filter by label' search-filter/>
-    <ul class='filterTagList col-lg-9 col-md-9 col-sm-9 col-xs-9'>
-      <li data-ng-repeat='keyword in keywordList | filter:searchTerm.keywords' set-filter='setFilter()'>{{ keyword }}</li>
-    </ul>
+  <li class='filterLabels col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+    <div class='filterInput col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+      <input type='text' data-ng-model='searchTerm.keywords' class='searchField col-lg-12 col-md-12 col-sm-12 col-xs-12' placeholder='Filter by label' reset-search='doneSearching()' show-done highlight-label />
+      <div class='filterIcon'><i class="fa fa-filter"></i></div>
+    </div>
     <button done-filtering='doneSearching()' class='doneSearching'><p>x</p></button>
   </li> <!-- end filterWindow -->
 
   <li data-ng-repeat='item in items | filter:searchTerm' class='listItem col-lg-12 col-md-12 col-sm-12 col-xs-12' >
-    <div class='incompleteListDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}' show-details='getItem($index)' data-ng-show='complete === false'>
-      <input type='checkbox' class='changeStatus complete col-lg-1 col-md-1 col-sm-1 col-xs-1' remove-item='removeItem($index)' />
-      <p class='col-lg-11 col-md-11 col-sm-11 col-xs-11'>{{ item.title }}</p>
+    <div class='incompleteListDetails clearfix' data-id='{{ item.id }}' show-details='getItem($index)' data-ng-show='complete === false'>
+      <input type='checkbox' class='changeStatus' remove-item='removeItem($index)' />
+      <div class='listItemDetails'>
+        <p>{{ item.title }}</p>
+        <p class='keyList' display-keywords='{{ item.keywords }}'></p>
+        <!-- <ul class='keyList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+          <li data-ng-repeat='keyword in item.keywords' class='keyword'>
+            {{ keyword }},&nbsp
+          </li>
+        </ul> -->
+      </div>
     </div> <!-- end listDetails -->
     <div class='completeListDetails col-lg-12 col-md-12 col-sm-12 col-xs-12' data-id='{{ item.id }}' data-ng-show='complete'>
       <input type='checkbox' class='changeStatus complete col-lg-1 col-md-1 col-sm-1 col-xs-1' remove-item='removeItem($index)' checked />

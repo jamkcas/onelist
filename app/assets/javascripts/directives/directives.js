@@ -6,9 +6,8 @@ angular.module('oneListApp').directive('addItem', function() {
   return function(scope, element, attrs) {
     element.bind('keyup', function(e) {
       if(e.which === 13) {
-      console.log('here')
-      scope.$apply(attrs.addItem);
-    }
+        scope.$apply(attrs.addItem);
+      }
     });
   }
 });
@@ -77,8 +76,14 @@ angular.module('oneListApp').directive('showDetails', function() {
       }
       $('.time input').val(toMilitary(date.time));
       $('.date input').val(date.day);
+      // if($('.listView').offset().top >= 0) {
+      //   var top = 0;
+      // } else {
+      //   var top = -$('.listView').offset().top + 76;
+      // }
       // Animating the details view
       $('.detailsView').css('right', -width);
+      // $('.detailsView').css('top', top);
       $('.detailsView').css('width', width);
       $('.detailsView').animate({ 'right': '0' });
     });
@@ -95,6 +100,25 @@ angular.module('oneListApp').directive('hide', function() {
         scope.$apply(attrs.hide);
       }, 300);
     });
+  }
+});
+
+angular.module('oneListApp').directive('displayKeywords', function() {
+  // Creating a keyword list for the item and adding it to the item list element
+  return function(scope, element, attrs) {
+    var keywords = attrs.displayKeywords;
+    var keyList = keywords.replace(/\"|\[|\]/g, '');
+    keyList = keyList.replace(/\,/g, ', ');
+    if(keyList.length > 30) {
+      keyList = keyList.slice(0, 30) + '...';
+    }
+
+    if(keyList === '') {
+      keyList = '< No Labels >';
+    }
+
+    var txt = document.createTextNode(keyList);
+    element[0].appendChild(txt);
   }
 });
 
@@ -276,61 +300,111 @@ angular.module('oneListApp').directive('filterLabels', function() {
 
 angular.module('oneListApp').directive('doneFiltering', function() {
   return function(scope, element, attrs) {
-    // When x button is clicked the add item input is displayed and the filter label input is hidden
     element.bind('click', function() {
-      $('.searchOverlay').css('z-index', '-100');
-      $('.filterTagList').css('opacity', '0');
-      $('.filterWindow').css('overflow', 'hidden');
-      // Hiding the filter label input and displaying the add item input
-      $('.filterWindow').animate({ 'height': '0px' }, { 'complete': function() {
-          $('.filterWindow').css({ 'border-bottom': '0px' });
-          $('.addItem').css({ 'border-bottom': '1px solid black' });
-          $('.addItem').animate({ 'height': '78px' });
-          // Invoking the done searching function on current scope to clear the filter label results
-          scope.$apply(attrs.doneFiltering);
-        }
-      });
-      // Displaying the search items title text
-      $('.searchItems p').css('opacity', '1');
+      scope.$apply(attrs.doneFiltering);
     });
   }
 });
 
-angular.module('oneListApp').directive('searchFilter', function() {
+// Resets the search filter if the backspace or delete key is used to clear the search input field
+angular.module('oneListApp').directive('resetSearch', function() {
   return function(scope, element, attrs) {
-    element.bind('keyup', function() {
-      // If their is an input value then the filtered keyword list display is shown
-      if(element.val() !== '') {
-        $('.filterWindow').css('overflow', 'visible');
-        $('.filterTagList').css('opacity', '1');
-        // Removing the text shadow if there is nothing in the filtered keyword list
-        if($('.filterTagList').children().length === 0) {
-          $('.filterTagList').css('box-shadow', 'none');
-        } else {
-          $('.filterTagList').css('box-shadow', '0.5px 1px 1px #878787');
+    element.bind('keyup', function(e) {
+      var key = e.keyCode || e.charCode;
+      if(key === 8 || key === 46)  {
+        if(scope.searchTerm && scope.searchTerm.keywords === '') {
+          // Invoking the done searching function on current scope to clear the filter label results
+          scope.$apply(attrs.resetSearch);
         }
-      // If there is no input value then the filtered keyword list display is hidden
-      } else {
-        $('.filterTagList').css('opacity', '0');
-        $('.filterWindow').css('overflow', 'hidden');
       }
     });
   }
 });
 
-angular.module('oneListApp').directive('setFilter', function() {
+// Shows the clear search button when actively searching
+angular.module('oneListApp').directive('showDone', function() {
   return function(scope, element, attrs) {
-    element.bind('click', function() {
-      // If a keyword is selected the search field input is set to it
-      $('.searchField').val(scope.this.keyword);
-      // Invoking the set filter function to filter the list by the selected keyword
-      scope.$apply(attrs.setFilter);
-      // Hiding the filtered keyword list display
-      $('.filterTagList').css('opacity', '0');
-      $('.filterWindow').css('overflow', 'hidden');
+    element.bind('keyup', function() {
+      if(scope.searchTerm && scope.searchTerm.keywords !== '') {
+        var done = document.getElementsByClassName('doneSearching')[0];
+        done.style.opacity = 1;
+      }
     });
   }
 });
+
+angular.module('oneListApp').directive('highlightLabel', function() {
+  return function(scope, element, attrs) {
+    element.bind('keyup', function() {
+      var keyList = document.getElementsByClassName('keyList');
+      var search = scope.searchTerm.keywords;
+      for(var i = 0, iLen = keyList.length; i < iLen; i += 1) {
+        var keys = keyList[i].getAttribute('display-keywords');
+        keys = keys.replace(/\"|\[|\]/g, '');
+        keys = keys.split(',');
+        for(var j = 0, jLen = keys.length; j < jLen; j += 1) {
+          if(search) {
+            if(keys[j].match(search)) {
+              key = keys.splice(j, 1);
+              keys = key.concat(keys);
+            }
+          }
+        }
+        keys = keys.join();
+        if(keys.length > 30) {
+          keys = keys.slice(0, 30) + '...';
+        }
+        keyList[i].textContent = keys === '' ? '< No Label >' : keys;
+      }
+    });
+  }
+});
+
+angular.module('oneListApp').directive('toggleSearch', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      var search = document.getElementsByClassName('searchInput')[0];
+      var addItem = document.getElementsByClassName('addItem')[0];
+      var filterLabels = document.getElementsByClassName('filterLabels')[0];
+      var cancelSearch = document.getElementsByClassName('cancelSearch')[0];
+
+      if(search.className.match(/showSearch/)) {
+        addItem.className = 'addItem showAddItem';
+        filterLabels.className = 'filterLabels showFilterLabels';
+        search.className = 'searchInput hideSearch';
+        cancelSearch.className = 'cancelSearch hideCancelSearch';
+        setTimeout(function() {
+          cancelSearch.className += ' hidden';
+        }, 300);
+      } else {
+        filterLabels.className = 'filterLabels hideFilterLabels';
+        addItem.className = 'addItem hideAddItem';
+        search.className = 'searchInput showSearch';
+        cancelSearch.className = 'cancelSearch showCancelSearch';
+      }
+    });
+  }
+});
+
+angular.module('oneListApp').directive('cancelSearch', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      var search = document.getElementsByClassName('searchInput')[0];
+      var addItem = document.getElementsByClassName('addItem')[0];
+      var filterLabels = document.getElementsByClassName('filterLabels')[0];
+      var cancelSearch = document.getElementsByClassName('cancelSearch')[0];
+
+      addItem.className = 'addItem showAddItem';
+      filterLabels.className = 'filterLabels showFilterLabels';
+      search.className = 'searchInput hideSearch';
+      cancelSearch.className = 'cancelSearch hideCancelSearch';
+      setTimeout(function() {
+        cancelSearch.className += ' hidden';
+      }, 300)
+    });
+  }
+});
+
 
 angular.module('oneListApp').directive('changeView', function() {
   return function(scope, element, attrs) {
@@ -345,6 +419,11 @@ angular.module('oneListApp').directive('changeView', function() {
         scope.$apply(attrs.changeView);
         elem.fadeIn(200);
       });
+      var search = document.getElementsByClassName('search')[0];
+      search.style.opacity = 0;
+      setTimeout(function() {
+        search.className = 'search hidden';
+      }, 200);
     });
   }
 });
@@ -360,6 +439,11 @@ angular.module('oneListApp').directive('backtoList', function() {
         scope.$apply(attrs.backtoList);
         $('.listView').fadeIn(200);
       });
+      var search = document.getElementsByClassName('search')[0];
+      search.style.opacity = 1;
+      setTimeout(function() {
+        search.className = 'search';
+      }, 200);
     });
   }
 });

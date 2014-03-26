@@ -46,8 +46,10 @@ angular.module('oneListApp').controller('completeController', ['$scope', 'itemsF
     $scope.item = $scope.items[i]
   };
 
-  $scope.changePage = function() {
-    window.location = '#/incomplete';
+  $scope.changePage = function(page) {
+    if(page === 'incomplete') {
+      window.location = '#/incomplete';
+    }
   };
 
   $scope.doneSearching = function() {
@@ -285,8 +287,10 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
     });
   };
 
-  $scope.changePage = function() {
-    window.location = '#/complete';
+  $scope.changePage = function(page) {
+    if(page === 'complete') {
+      window.location = '#/complete';
+    }
   };
 
   $scope.addKeywords = function() {
@@ -369,13 +373,11 @@ angular.module('oneListApp').controller('incompleteController', ['$scope', 'item
   }
 
   $scope.doneSearching = function() {
-    // Resetting the search term values when done searching or filtering
+    // Resetting the search term values when done searching or filtering and hiding the clear search button
     if(this.searchTerm) {
       this.searchTerm = '';
-    }
-    // Resetting the search filter value when done filtering
-    if(this.searchFilter) {
-      this.searchFilter = '';
+      var done = document.getElementsByClassName('doneSearching')[0];
+      done.style.opacity = 0;
     }
   };
 

@@ -3,7 +3,22 @@
   <div data-ng-include src="'templates/options.html'" hide-details='clearScope()'></div>
 
   <div class='mainView col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-    <div data-ng-include src="'templates/header.html'"></div>
+    <!-- <div data-ng-include src="'templates/header.html'"></div> -->
+    <header class='mainHeader row'>
+      <div class='options'>
+        <i class="fa fa-bars" show-options></i>
+      </div> <!-- end options -->
+
+     <!--  <div class='search'>
+        <div class='searchWindow'>
+          <input type='text' placeholder='Search for an item' class='searchInput' data-ng-model='searchTerm.title' />
+          <p class='cancelSearch hidden' cancel-search done-filtering='doneSearching()'>cancel</p>
+        </div>
+        <div class='searchButton'>
+          <p toggle-search><i class="fa fa-search"></i></p>
+        </div>
+      </div> -->
+    </header> <!-- end mainHeader -->
     <div class='listView'  data-ng-include src="'templates/list_view.html'" data-ng-show='view === "list"'></div>
     <div class='labelView'  data-ng-include src="'templates/label_view.html'" data-ng-show='view === "labels"'></div>
     <div class='accountView'  data-ng-include src="'templates/account_view.html'" data-ng-show='view === "account"'></div>

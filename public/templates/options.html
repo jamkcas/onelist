@@ -5,7 +5,8 @@
   </header> <!-- end optionsTitle -->
 
   <ul class='optionsList col-lg-12 col-md-12 col-sm-12 col-xs-12'>
-    <li><p change-page='changePage()'>{{ nextPageTitle }}</p></li>
+    <li><p change-page='changePage("incomplete")'>To Do List</p></li>
+    <li><p change-page='changePage("complete")'>Completed List</p></li>
     <li><p class='labels' change-view='changeView("labels")'>Manage Labels</p></li>
     <li><p class='account' change-view='changeView("account")'>Edit Account</p></li>
     <li><a href='/sessions/id' data-method='delete'><p>Log Out</p></a></li>

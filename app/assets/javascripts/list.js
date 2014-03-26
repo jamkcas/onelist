@@ -9,7 +9,11 @@ var defineLeft = function() {
 // Function to set element height to either the mainView height or the window height depending which is bigger
 var setHeight = function(elem) {
   // Changing the height if the window or main view height is greater than the elements height{
-  elem.css('height', $(window).height());
+  if($('.mainView').height() > $(window).height()) {
+    elem.css('height', $('.mainView').height());
+  } else {
+    elem.css('height', $(window).height());
+  }
 };
 
 // Function to calculate width for details or options views

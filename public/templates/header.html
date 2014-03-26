@@ -1,25 +1,13 @@
 <header class='mainHeader row'>
-  <div class='options col-lg-3 col-md-3 col-sm-4 col-xs-4'>
+  <div class='options'>
     <i class="fa fa-bars" show-options></i>
   </div> <!-- end options -->
 
-  <div class='mainTitle col-lg-3 col-md-3 col-sm-4 col-xs-4 '>
-    <h1>OneList</h1>
-  </div> <!-- end mainTitle -->
-
-<!--   <ul id='loginDisplay' class='col-lg-3 col-lg-offset-6 col-md-3 col-md-offset-6 col-sm-3 col-sm-offset-5 col-xs-3 col-xs-offset-5'>
-    <li><p>{{ message }}</p></li>
-    <li><a href='/sessions/id' data-method='delete'>Log Out</a></li>
-  </ul> end loginDisplay -->
-
-  <div class='searchFilters col-lg-12 col-md-12 col-sm-12 col-xs-12' data-ng-show='view === "list"'>
-    <div class='searchOverlay col-lg-12 col-md-12 col-sm-12 col-xs-12'></div>
-    <div class='searchLabels col-lg-6 col-md-6 col-sm-6 col-xs-6' filter-labels='createKeywordList()'>
-      <p>Narrow List By Label</p>
-    </div> <!-- end searchLabels -->
-
-    <div class='searchItems col-lg-6 col-md-6 col-sm-6 col-xs-6' search-items>
-      <p>Search For List Item</p>
-    </div> <!-- end searchItems-->
-  </div> <!-- end searchFilters -->
+  <div class='search'>
+    <div class='searchWindow'>
+      <input type='text' placeholder='Search for an item' class='searchInput' data-ng-model='searchTerm.title' />
+      <p class='cancelSearch hidden' cancel-search>cancel</p>
+    </div>
+    <p toggle-search><i class="fa fa-search"></i></p>
+  </div>
 </header> <!-- end mainHeader -->
